@@ -12,429 +12,283 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* ── Palette articolata ── */
-  --ink:      #080f0b;   /* sfondo principale, quasi nero */
-  --ink2:     #0f1a13;   /* card sfondo */
-  --ink3:     #172110;   /* card hover */
-  --ink4:     #1e2d18;   /* borders leggeri */
-  --sage:     #2a4a30;   /* tono medio scuro */
-  --forest:   #1a6644;   /* verde foresta, accento principale */
-  --moss:     #3a9e6a;   /* verde brillante interattivo */
-  --mint:     #72c99a;   /* verde chiaro, highlights */
-  --cream:    #f0f7f2;   /* testo primario su scuro */
-  --fog:      #8fad96;   /* testo secondario */
-  --dim:      #4a6650;   /* testo terziario / muted */
-  /* Colori categoria — vividi sul scuro */
-  --c-sight:  #5eead4;   /* teal — attrazioni */
-  --c-food:   #93c5fd;   /* blue-300 — cibo */
-  --c-night:  #d8b4fe;   /* purple-300 — serata */
-  --c-spa:    #fdba74;   /* orange-300 — terme */
-  --c-hotel:  #cbd5e1;   /* slate-300 — hotel */
-  /* Accenti secondari palette */
-  --gold:     #c9963a;   /* oro — dettagli premium */
-  --gold2:    #e8c07a;   /* oro chiaro */
-  --rust:     #b85c1a;   /* ruggine — prenotazioni terme */
-  --cobalt:   #2563eb;   /* blu — link mappe */
-  /* Safe areas */
-  --st: env(safe-area-inset-top, 44px);
-  --sb: env(safe-area-inset-bottom, 20px);
+  --ink:   #050806;
+  --ink2:  #0a110d;
+  --ink3:  #0f1a0e;
+  --ink4:  #162210;
+  --moss:  #32b86a;
+  --mint:  #6ad8a0;
+  --cream: #f0f7f2;
+  --fog:   #8fad96;
+  --dim:   #4a6650;
+  --gold:  #daa040;
+  --gold2: #f0d080;
+  --rust:  #b85c1a;
+  --cobalt:#1d4ed8;
+  --c-s:   #4af0d8;
+  --c-f:   #80b8ff;
+  --c-n:   #cca0ff;
+  --c-a:   #ffb060;
+  --c-h:   #cbd5e1;
+  --st: env(safe-area-inset-top, 0px);
+  --sb: env(safe-area-inset-bottom, 0px);
+  --pt: max(16px, var(--st));
+  --pb: max(8px, var(--sb));
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--ink);color:var(--cream);font-family:'Outfit',sans-serif;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; }
-body { background: var(--ink); color: var(--cream); font-family: 'Outfit', sans-serif; overscroll-behavior: none; -webkit-font-smoothing: antialiased; }
+/* ── COVER ── */
+#cover{position:fixed;inset:0;z-index:300;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;overflow:hidden}
+.cover-art{position:absolute;inset:0;overflow:hidden}
+.cover-art svg{width:100%;height:100%}
+/* ── SHIMMER particles ── */
+@keyframes float{0%,100%{transform:translateY(0) scale(1);opacity:.5}50%{transform:translateY(-18px) scale(1.3);opacity:.9}}
+@keyframes drift{0%{transform:translateX(0)}100%{transform:translateX(40px)}}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.7}}
+.sparkle{animation:float 4s ease-in-out infinite}
+.sparkle:nth-child(2n){animation-duration:5.2s;animation-delay:-.8s}
+.sparkle:nth-child(3n){animation-duration:3.6s;animation-delay:-1.5s}
+.cover-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,15,11,.15) 0%,rgba(8,15,11,0) 20%,rgba(20,15,5,.25) 45%,rgba(8,15,11,.7) 65%,rgba(8,15,11,1) 100%)}
+.cover-content{position:relative;z-index:1;width:100%;padding:0 28px calc(var(--pb) + 52px);text-align:left}
+.c-eye{font-size:10px;font-weight:500;letter-spacing:4px;text-transform:uppercase;color:var(--mint);margin-bottom:10px;opacity:0;animation:fu .7s .3s ease forwards}
+.c-ttl{font-family:'Cormorant Garamond',serif;font-size:clamp(68px,20vw,96px);font-weight:300;line-height:.9;color:var(--cream);letter-spacing:-2px;opacity:0;animation:fu .7s .45s ease forwards}
+.c-ttl em{font-style:italic;color:var(--mint)}
+.c-sub{font-size:13px;font-weight:300;color:var(--fog);letter-spacing:1.5px;margin-top:14px;opacity:0;animation:fu .7s .6s ease forwards}
+.c-meta{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;opacity:0;animation:fu .7s .72s ease forwards}
+.c-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;background:rgba(114,201,154,.1);border:.5px solid rgba(114,201,154,.28);font-size:11.5px;color:var(--mint)}
+.c-btn{margin-top:20px;width:100%;padding:15px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--moss),#2dbe6a);color:var(--ink);font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .2s;box-shadow:0 8px 32px rgba(58,158,106,.35),0 0 60px rgba(58,158,106,.12);opacity:0;animation:fu .7s .85s ease forwards}
+.c-btn:active{transform:scale(.98)}
+#cover.exit{animation:cx .6s ease forwards}
+@keyframes cx{to{opacity:0;transform:translateY(-12px)}}
 
-/* ════════════════════════════════
-   COVER
-════════════════════════════════ */
-#cover {
-  position: fixed; inset: 0; z-index: 300;
-  background: var(--ink);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: flex-end;
-  overflow: hidden;
-}
-.cover-bg {
-  position: absolute; inset: 0;
-  background-image: url('https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=800&q=80');
-  background-size: cover; background-position: center 40%;
-  opacity: .55;
-}
-.cover-grad {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(8,15,11,.3) 0%, rgba(8,15,11,.0) 30%, rgba(8,15,11,.7) 65%, rgba(8,15,11,1) 100%);
-}
-.cover-content {
-  position: relative; z-index: 1;
-  width: 100%; padding: 0 28px calc(var(--sb) + 52px);
-  text-align: left;
-}
-.c-eye {
-  font-size: 10px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase;
-  color: var(--mint); margin-bottom: 10px;
-  opacity: 0; animation: fu .7s .3s ease forwards;
-}
-.c-ttl {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(62px, 18vw, 88px); font-weight: 300; line-height: .9;
-  color: var(--cream); letter-spacing: -2px;
-  opacity: 0; animation: fu .7s .45s ease forwards;
-}
-.c-ttl em { font-style: italic; color: var(--mint); }
-.c-sub {
-  font-size: 13px; font-weight: 300; color: var(--fog);
-  letter-spacing: 1.5px; margin-top: 14px;
-  opacity: 0; animation: fu .7s .6s ease forwards;
-}
-.c-meta {
-  display: flex; align-items: center; gap: 12px; margin-top: 28px;
-  opacity: 0; animation: fu .7s .75s ease forwards;
-}
-.c-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 14px; border-radius: 20px;
-  background: rgba(114,201,154,.12); border: .5px solid rgba(114,201,154,.3);
-  font-size: 12px; color: var(--mint); font-weight: 400;
-}
-.c-btn {
-  margin-top: 24px; width: 100%;
-  padding: 16px; border: none; border-radius: 14px;
-  background: var(--moss); color: var(--ink);
-  font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 600;
-  cursor: pointer; letter-spacing: .3px;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: transform .2s; box-shadow: 0 8px 32px rgba(58,158,106,.3);
-  opacity: 0; animation: fu .7s .9s ease forwards;
-}
-.c-btn:active { transform: scale(.98); }
-#cover.exit { animation: cx .6s ease forwards; }
-@keyframes cx { to { opacity: 0; transform: translateY(-12px); } }
+/* ── APP ── */
+#app{display:none;flex-direction:column;height:100dvh;overflow:hidden}
+#app.show{display:flex}
+#scroll-area{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 
-/* ════════════════════════════════
-   APP SHELL
-════════════════════════════════ */
-#app { display: none; flex-direction: column; height: 100dvh; overflow: hidden; }
-#app.show { display: flex; }
-#scroll-area { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+/* ── HEADER ── */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;padding:calc(var(--pt) + 6px) 20px 10px;background:rgba(8,15,11,.92);backdrop-filter:blur(28px) saturate(200%);-webkit-backdrop-filter:blur(28px) saturate(200%);border-bottom:.5px solid rgba(58,158,106,.12);display:flex;align-items:center;justify-content:space-between;transform:translateY(0);transition:transform .32s cubic-bezier(.4,0,.2,1),padding .28s ease;will-change:transform}
+.hdr.hide{transform:translateY(-100%)}
+.hdr.compact{padding-top:calc(var(--pt) + 2px);padding-bottom:6px}
+.h-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--cream);letter-spacing:-.3px;line-height:1}
+.h-title em{font-style:italic;color:var(--mint)}
+.h-sub{font-size:10px;font-weight:300;color:var(--fog);margin-top:2px;letter-spacing:.4px;max-height:18px;opacity:1;transition:max-height .28s ease,opacity .28s ease;overflow:hidden}
+.hdr.compact .h-sub{max-height:0;opacity:0}
+.h-icon{width:34px;height:34px;border-radius:50%;background:var(--ink3);border:.5px solid rgba(114,201,154,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.h-icon svg{width:18px;height:18px;stroke:var(--mint);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.hdr-spacer{height:calc(var(--pt) + 62px)}
 
-/* ════════════════════════════════
-   HEADER — fixed, scroll-aware
-════════════════════════════════ */
-.hdr {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: calc(var(--st) + 6px) 20px 10px;
-  background: rgba(8,15,11,.9);
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
-  border-bottom: .5px solid rgba(58,158,106,.12);
-  display: flex; align-items: center; justify-content: space-between;
-  transform: translateY(0);
-  transition: transform .32s cubic-bezier(.4,0,.2,1), padding .28s ease;
-  will-change: transform;
-}
-.hdr.hide { transform: translateY(-100%); }
-.hdr.compact { padding-top: calc(var(--st) + 2px); padding-bottom: 6px; }
-.hdr-left {}
-.h-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 21px; font-weight: 400; color: var(--cream);
-  line-height: 1; letter-spacing: -.3px;
-}
-.h-title em { font-style: italic; color: var(--mint); }
-.h-sub {
-  font-size: 10px; font-weight: 300; color: var(--fog);
-  margin-top: 2px; letter-spacing: .4px;
-  max-height: 18px; opacity: 1;
-  transition: max-height .28s ease, opacity .28s ease;
-  overflow: hidden;
-}
-.hdr.compact .h-sub { max-height: 0; opacity: 0; }
-.h-badge {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: var(--ink3); border: .5px solid var(--ink4);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px; flex-shrink: 0;
-}
-.hdr-spacer { height: calc(var(--st) + 62px); }
+/* ── BOTTOM NAV ── */
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:100;display:flex;background:rgba(8,15,11,.96);backdrop-filter:blur(28px) saturate(200%);-webkit-backdrop-filter:blur(28px) saturate(200%);border-top:.5px solid rgba(255,255,255,.07);padding-bottom:var(--pb);transform:translateY(0);transition:transform .32s cubic-bezier(.4,0,.2,1);will-change:transform}
+.bnav.hide{transform:translateY(100%)}
+.bnav-spacer{height:calc(54px + var(--pb))}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 0 6px;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:9px;font-weight:400;color:var(--dim);cursor:pointer;transition:color .2s;letter-spacing:.8px;text-transform:uppercase;position:relative}
+.nb.on{color:var(--cream)}
+.nb.on::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:20px;height:1.5px;background:var(--mint);border-radius:0 0 2px 2px}
+.nb svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 
-/* ════════════════════════════════
-   BOTTOM NAV — fixed, monochrome SVG icons
-════════════════════════════════ */
-.bnav {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-  display: flex;
-  background: rgba(8,15,11,.96);
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
-  border-top: .5px solid rgba(255,255,255,.07);
-  padding-bottom: var(--sb);
-  transform: translateY(0);
-  transition: transform .32s cubic-bezier(.4,0,.2,1);
-  will-change: transform;
-}
-.bnav.hide { transform: translateY(100%); }
-.bnav-spacer { height: calc(54px + var(--sb)); }
-.nb {
-  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  padding: 10px 0 6px; border: none; background: transparent;
-  font-family: 'Outfit', sans-serif; font-size: 9px; font-weight: 400;
-  color: var(--dim); cursor: pointer; letter-spacing: .8px; text-transform: uppercase;
-  transition: color .2s; position: relative;
-}
-.nb.on { color: var(--cream); }
-.nb.on::before {
-  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 20px; height: 1.5px; background: var(--mint); border-radius: 0 0 2px 2px;
-}
-/* SVG icons: monochrome, inherit color */
-.nb svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+/* ── DAY PILLS — full width ── */
+.pills-wrap{position:sticky;top:0;z-index:90;background:var(--ink2);border-bottom:.5px solid rgba(255,255,255,.05)}
+.pills{display:flex;width:100%}
+.pill{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 13px;border:none;background:transparent;color:var(--dim);cursor:pointer;position:relative;transition:color .25s;font-family:'Outfit',sans-serif}
+.pill::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:1.5px;background:var(--mint);border-radius:2px;transition:width .3s cubic-bezier(.4,0,.2,1)}
+.pill.on{color:var(--cream);text-shadow:0 0 12px rgba(114,201,154,.3)}.pill.on::after{width:26px}
+.pn{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase}
+.pd{font-size:22px;font-weight:300;line-height:1.1;margin-top:1px}
 
-/* ════════════════════════════════
-   DAY HERO IMAGE
-════════════════════════════════ */
-.day-hero {
-  width: 100%; height: 200px;
-  position: relative; overflow: hidden;
-  background: var(--ink2);
-}
-.day-hero img {
-  width: 100%; height: 100%; object-fit: cover;
-  display: block; opacity: .75;
-}
-.day-hero-grad {
-  position: absolute; inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, var(--ink2) 100%);
-}
-.day-hero-label {
-  position: absolute; bottom: 14px; left: 20px;
-}
-.dht {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px; font-weight: 300; color: var(--cream);
-  letter-spacing: -.5px; line-height: 1;
-}
-.dht em { font-style: italic; color: var(--mint); }
-.dhs { font-size: 11px; font-weight: 300; color: var(--fog); margin-top: 3px; letter-spacing: .4px; }
+/* ── DAY HERO (SVG illustration) ── */
+.day-hero{width:100%;height:210px;position:relative;overflow:hidden;background:var(--ink2);display:block}
+.day-hero svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.day-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(201,150,58,.06) 0%,transparent 70%);pointer-events:none}
+.hero-grad{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,26,19,.05) 0%,transparent 15%,rgba(15,26,19,.5) 55%,rgba(15,26,19,.9) 80%,var(--ink2) 100%);pointer-events:none}
+.day-label{position:absolute;bottom:14px;left:20px;right:20px}
+.dht{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--cream);letter-spacing:-.5px;line-height:1;text-shadow:0 2px 16px rgba(0,0,0,.7)}
+.dht em{font-style:italic;color:var(--mint)}
+.dhs{font-size:12px;font-weight:300;color:var(--fog);margin-top:4px;letter-spacing:.4px;text-shadow:0 1px 6px rgba(0,0,0,.8)}
 
-/* ════════════════════════════════
-   DAY PILLS
-════════════════════════════════ */
-.pills-wrap {
-  position: sticky; top: 0; z-index: 90;
-  background: var(--ink2); border-bottom: .5px solid rgba(255,255,255,.05);
-}
-.pills { display: flex; width: 100%; }
-.pill {
-  flex: 1; display: flex; flex-direction: column; align-items: center;
-  padding: 10px 0 13px; border: none; background: transparent;
-  color: var(--dim); cursor: pointer; position: relative;
-  transition: color .25s; font-family: 'Outfit', sans-serif;
-}
-.pill::after {
-  content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 0; height: 1.5px; background: var(--mint); border-radius: 2px;
-  transition: width .3s cubic-bezier(.4,0,.2,1);
-}
-.pill.on { color: var(--cream); }
-.pill.on::after { width: 24px; }
-.pn { font-size: 10px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
-.pd { font-size: 22px; font-weight: 300; line-height: 1.1; margin-top: 1px; }
+/* ── LEGEND ── */
+.lgr{display:flex;width:100%;background:var(--ink2);border-bottom:.5px solid rgba(255,255,255,.05);overflow-x:auto;scrollbar-width:none;padding:8px 16px 9px;gap:6px}
+.lgr::-webkit-scrollbar{display:none}
+.lg{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;letter-spacing:.3px;border:.5px solid}
+.lg-s{color:var(--c-s);border-color:rgba(94,234,212,.22);background:rgba(94,234,212,.07)}
+.lg-f{color:var(--c-f);border-color:rgba(147,197,253,.22);background:rgba(147,197,253,.07)}
+.lg-n{color:var(--c-n);border-color:rgba(216,180,254,.22);background:rgba(216,180,254,.07)}
+.lg-a{color:var(--c-a);border-color:rgba(253,186,116,.22);background:rgba(253,186,116,.07)}
+.lg-h{color:var(--c-h);border-color:rgba(203,213,225,.18);background:rgba(203,213,225,.05)}
+.lgdot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
 
-/* ════════════════════════════════
-   LEGEND — high contrast pills
-════════════════════════════════ */
-.lgr {
-  display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
-  padding: 10px 16px 10px;
-  background: var(--ink2);
-  border-bottom: .5px solid rgba(255,255,255,.05);
-}
-.lgr::-webkit-scrollbar { display: none; }
-.lg {
-  display: inline-flex; align-items: center; gap: 5px;
-  flex-shrink: 0; padding: 4px 11px; border-radius: 20px;
-  font-size: 10.5px; font-weight: 500; letter-spacing: .3px; border: .5px solid;
-}
-.lg-s { color: var(--c-sight); border-color: rgba(94,234,212,.25); background: rgba(94,234,212,.07); }
-.lg-f { color: var(--c-food);  border-color: rgba(147,197,253,.25); background: rgba(147,197,253,.07); }
-.lg-n { color: var(--c-night); border-color: rgba(216,180,254,.25); background: rgba(216,180,254,.07); }
-.lg-a { color: var(--c-spa);   border-color: rgba(253,186,116,.25); background: rgba(253,186,116,.07); }
-.lg-h { color: var(--c-hotel); border-color: rgba(203,213,225,.2);  background: rgba(203,213,225,.05); }
-.lgdot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+/* ── TIMELINE ── */
+.tl{padding:12px 20px 14px;background:var(--ink2)}
+.ti{display:flex;gap:12px;margin-bottom:8px;opacity:0;animation:fu .38s ease forwards}
+.day-section.on .ti:nth-child(1){animation-delay:.04s}.day-section.on .ti:nth-child(2){animation-delay:.08s}
+.day-section.on .ti:nth-child(3){animation-delay:.12s}.day-section.on .ti:nth-child(4){animation-delay:.16s}
+.day-section.on .ti:nth-child(5){animation-delay:.20s}.day-section.on .ti:nth-child(6){animation-delay:.24s}
+.day-section.on .ti:nth-child(7){animation-delay:.28s}.day-section.on .ti:nth-child(8){animation-delay:.32s}
+.day-section.on .ti:nth-child(9){animation-delay:.36s}
+.day-section.on .tip-box{opacity:0;animation:fu .38s .4s ease forwards}
+.tll{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:20px;padding-top:14px}
+.dot{width:8px;height:8px;border-radius:50%;border:1.5px solid;flex-shrink:0;z-index:1;transition:transform .2s}
+.ti.on .dot{transform:scale(1.4);box-shadow:0 0 8px currentColor}
+.seg{flex:1;width:1px;margin-top:4px;min-height:10px}
+.d-h{border-color:var(--c-h);background:rgba(203,213,225,.1)}
+.d-s{border-color:var(--c-s);background:rgba(94,234,212,.12)}
+.d-f{border-color:var(--c-f);background:rgba(147,197,253,.12)}
+.d-n{border-color:var(--c-n);background:rgba(216,180,254,.12)}
+.d-a{border-color:var(--c-a);background:rgba(253,186,116,.12)}
+.seg-h{background:rgba(203,213,225,.08)}.seg-s{background:rgba(94,234,212,.1)}
+.seg-f{background:rgba(147,197,253,.1)}.seg-n{background:rgba(216,180,254,.1)}.seg-a{background:rgba(253,186,116,.1)}
 
-/* ════════════════════════════════
-   TIMELINE
-════════════════════════════════ */
-.tl { padding: 12px 20px 14px; background: var(--ink2); }
-.ti {
-  display: flex; gap: 12px; margin-bottom: 8px;
-  opacity: 0; animation: fu .38s ease forwards;
-}
-.day-section.on .ti:nth-child(1) { animation-delay: .04s; }
-.day-section.on .ti:nth-child(2) { animation-delay: .08s; }
-.day-section.on .ti:nth-child(3) { animation-delay: .12s; }
-.day-section.on .ti:nth-child(4) { animation-delay: .16s; }
-.day-section.on .ti:nth-child(5) { animation-delay: .20s; }
-.day-section.on .ti:nth-child(6) { animation-delay: .24s; }
-.day-section.on .ti:nth-child(7) { animation-delay: .28s; }
-.day-section.on .ti:nth-child(8) { animation-delay: .32s; }
-.day-section.on .ti:nth-child(9) { animation-delay: .36s; }
-.day-section.on .tip-box { opacity: 0; animation: fu .38s .4s ease forwards; }
+/* ── CARD ── */
+.card{flex:1;background:linear-gradient(145deg,var(--ink3),rgba(23,33,16,.85));border:.5px solid var(--ink4);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .22s,box-shadow .22s,transform .2s}
+.card.on{border-color:rgba(58,158,106,.3);box-shadow:0 6px 28px rgba(0,0,0,.35),0 0 0 1px rgba(58,158,106,.08);transform:translateY(-1px)}
+.ac-s{border-left:2px solid var(--c-s)}.ac-f{border-left:2px solid var(--c-f)}
+.ac-a{border-left:2px solid var(--c-a)}.ac-n{border-left:2px solid var(--c-n)}
+.cah{display:flex;align-items:center;padding:12px;gap:9px}
+.cal{flex:1;min-width:0}
+.can{font-size:13.5px;font-weight:500;color:var(--cream);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat{font-size:10px;font-weight:300;color:var(--fog);margin-top:2px;letter-spacing:.2px}
+.chv{flex-shrink:0;width:16px;height:16px;stroke:var(--dim);fill:none;stroke-width:2;stroke-linecap:round;transition:transform .3s cubic-bezier(.4,0,.2,1),stroke .2s}
+.card.on .chv{transform:rotate(180deg);stroke:var(--mint)}
+.cab{max-height:0;overflow:hidden;opacity:0;transition:max-height .4s cubic-bezier(.4,0,.2,1),opacity .3s ease}
+.card.on .cab{max-height:800px;opacity:1}
+.cabi{padding:0 13px 13px;border-top:.5px solid var(--ink4);padding-top:10px}
+.cad{font-size:13px;font-weight:300;color:var(--fog);line-height:1.65}
+.cad strong{color:var(--cream);font-weight:500}
+.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+.tag{font-size:10px;font-weight:400;padding:3px 9px;border-radius:20px}
+.tg{background:rgba(94,234,212,.1);color:var(--c-s)}
+.tb{background:rgba(147,197,253,.1);color:var(--c-f)}
+.ta{background:rgba(253,186,116,.1);color:var(--c-a)}
+.tp{background:rgba(216,180,254,.1);color:var(--c-n)}
+.tr{background:rgba(255,255,255,.06);color:var(--fog)}
+.tgold{background:rgba(201,150,58,.12);color:var(--gold2)}
 
-.tll { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 20px; padding-top: 14px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid; flex-shrink: 0; z-index: 1; transition: transform .2s, box-shadow .2s; }
-.ti.on .dot { transform: scale(1.4); }
-.seg { flex: 1; width: 1px; margin-top: 4px; min-height: 10px; }
+/* ── LINK ROW ── */
+.links{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.lnk{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:20px;font-size:11px;font-weight:600;text-decoration:none;transition:transform .15s,opacity .15s;letter-spacing:.2px;flex-shrink:0}
+.lnk:active{transform:scale(.96);opacity:.8}
+.lnk svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lnk-g{background:linear-gradient(135deg,var(--moss),#2cc06a);color:var(--ink)}
+.lnk-o{background:var(--rust);color:#fff}
+.lnk-b{background:var(--cobalt);color:#fff}
+.lnk-dim{background:rgba(255,255,255,.08);color:var(--fog);border:.5px solid rgba(255,255,255,.1)}
 
-.d-h { border-color: var(--c-hotel); background: rgba(203,213,225,.1); }
-.d-s { border-color: var(--c-sight); background: rgba(94,234,212,.12); box-shadow: 0 0 8px rgba(94,234,212,.08); }
-.d-f { border-color: var(--c-food);  background: rgba(147,197,253,.12); box-shadow: 0 0 8px rgba(147,197,253,.08); }
-.d-n { border-color: var(--c-night); background: rgba(216,180,254,.12); box-shadow: 0 0 8px rgba(216,180,254,.08); }
-.d-a { border-color: var(--c-spa);   background: rgba(253,186,116,.12); box-shadow: 0 0 8px rgba(253,186,116,.08); }
+/* ── TIP BOX ── */
+.tip-box{margin:4px 20px 6px;background:linear-gradient(135deg,rgba(26,102,68,.14),rgba(26,102,68,.08));border:.5px solid rgba(58,158,106,.22);border-radius:12px;padding:11px 14px;font-size:12.5px;font-weight:300;color:var(--fog);line-height:1.6}
+.tip-box strong{color:var(--mint);font-weight:500}
 
-.seg-h { background: rgba(203,213,225,.1); }
-.seg-s { background: rgba(94,234,212,.12); }
-.seg-f { background: rgba(147,197,253,.12); }
-.seg-n { background: rgba(216,180,254,.12); }
-.seg-a { background: rgba(253,186,116,.12); }
+/* ── DAY SECTIONS ── */
+.day-section{display:none}.day-section.on{display:block;animation:din .3s ease}
+@keyframes din{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
 
-/* ════════════════════════════════
-   CARD ACCORDION
-════════════════════════════════ */
-.card {
-  flex: 1; background: var(--ink3); border: .5px solid var(--ink4);
-  border-radius: 14px; overflow: hidden; cursor: pointer;
-  transition: border-color .22s, box-shadow .22s;
-}
-.card.on { border-color: rgba(58,158,106,.25); box-shadow: 0 4px 20px rgba(0,0,0,.25); }
-/* Left accent per categoria */
-.ac-s { border-left: 2px solid var(--c-sight); }
-.ac-f { border-left: 2px solid var(--c-food); }
-.ac-a { border-left: 2px solid var(--c-spa); }
-.ac-n { border-left: 2px solid var(--c-night); }
+/* ── ESSENTIALS ── */
+.ew{padding:16px 20px 20px}
+.est{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;font-style:italic;color:var(--mint);margin-bottom:10px;margin-top:6px}
+.ec{background:linear-gradient(145deg,var(--ink3),rgba(23,33,16,.8));border:.5px solid var(--ink4);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;overflow:hidden;transition:border-color .25s,box-shadow .25s}
+.ec.on{border-color:rgba(58,158,106,.3);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.ech{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ect{font-size:13px;font-weight:500;color:var(--cream)}
+.ecv{flex-shrink:0;width:15px;height:15px;stroke:var(--dim);fill:none;stroke-width:2;stroke-linecap:round;transition:transform .3s,stroke .2s}
+.ec.on .ecv{transform:rotate(180deg);stroke:var(--mint)}
+.ecb{max-height:0;overflow:hidden;opacity:0;transition:max-height .35s cubic-bezier(.4,0,.2,1),opacity .25s ease}
+.ec.on .ecb{max-height:700px;opacity:1}
+.ecx{font-size:12.5px;font-weight:300;color:var(--fog);line-height:1.65;padding-top:9px;border-top:.5px solid var(--ink4);margin-top:9px}
+.ecx strong{color:var(--cream);font-weight:500}
+.edv{height:.5px;background:var(--ink4);margin:14px 0}
 
-.cah { display: flex; align-items: center; padding: 12px 12px; gap: 9px; }
-.cal { flex: 1; min-width: 0; }
-.can { font-size: 13.5px; font-weight: 500; color: var(--cream); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cat { font-size: 10px; font-weight: 300; color: var(--fog); margin-top: 2px; letter-spacing: .2px; }
-.chv { flex-shrink: 0; width: 16px; height: 16px; stroke: var(--dim); fill: none; stroke-width: 2; stroke-linecap: round; transition: transform .3s cubic-bezier(.4,0,.2,1), stroke .2s; }
-.card.on .chv { transform: rotate(180deg); stroke: var(--mint); }
+/* ── GUIDE ── */
+#guide-out{display:none;flex-direction:column;height:100dvh;overflow:hidden;background:var(--ink)}
+.gst{display:flex;width:100%;background:var(--ink2);border-bottom:.5px solid rgba(255,255,255,.05);flex-shrink:0;margin-top:calc(var(--pt) + 62px)}
+.gsb{flex:1;padding:10px 0 13px;border:none;background:transparent;font-family:'Outfit',sans-serif;font-size:12px;font-weight:400;color:var(--dim);cursor:pointer;position:relative;transition:color .2s;text-align:center}
+.gsb::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:1.5px;background:var(--mint);border-radius:2px;transition:width .3s}
+.gsb.on{color:var(--cream)}.gsb.on::after{width:20px}
+.gs-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.gs{display:none;padding:14px 20px 20px;animation:din .3s ease}.gs.on{display:block}
 
-.cab { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .3s ease; }
-.card.on .cab { max-height: 540px; opacity: 1; }
-.cabi { padding: 0 13px 13px; border-top: .5px solid var(--ink4); padding-top: 11px; }
-.cad { font-size: 13px; font-weight: 300; color: var(--fog); line-height: 1.65; }
-.cad strong { color: var(--cream); font-weight: 500; }
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* Card image */
-.card-img {
-  width: 100%; height: 130px; object-fit: cover; display: block;
-  border-bottom: .5px solid var(--ink4); opacity: .8;
-}
-
-.tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 9px; }
-.tag { font-size: 10px; font-weight: 400; padding: 3px 9px; border-radius: 20px; }
-.tg  { background: rgba(94,234,212,.1);   color: var(--c-sight); }
-.tb  { background: rgba(147,197,253,.1);  color: var(--c-food); }
-.ta  { background: rgba(253,186,116,.1);  color: var(--c-spa); }
-.tp  { background: rgba(216,180,254,.1);  color: var(--c-night); }
-.tr  { background: rgba(255,255,255,.06); color: var(--fog); }
-.tgold { background: rgba(201,150,58,.12); color: var(--gold2); }
-
-/* Booking link */
-.blink {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 11px; padding: 7px 14px; border-radius: 20px;
-  font-size: 11.5px; font-weight: 600; text-decoration: none;
-  transition: transform .15s, opacity .15s; letter-spacing: .2px;
-}
-.blink:active { transform: scale(.97); opacity: .85; }
-.bl-green  { background: var(--moss);   color: var(--ink); }
-.bl-orange { background: var(--rust);   color: #fff; }
-.bl-blue   { background: var(--cobalt); color: #fff; }
-.blink svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-
-/* ════════════════════════════════
-   TIP BOX
-════════════════════════════════ */
-.tip-box {
-  margin: 4px 20px 6px;
-  background: rgba(26,102,68,.15); border: .5px solid rgba(58,158,106,.2);
-  border-radius: 10px; padding: 11px 14px;
-  font-size: 12.5px; font-weight: 300; color: var(--fog); line-height: 1.6;
-}
-.tip-box strong { color: var(--mint); font-weight: 500; }
-
-/* ════════════════════════════════
-   DAY SECTION
-════════════════════════════════ */
-.day-section { display: none; }
-.day-section.on { display: block; animation: din .3s ease; }
-@keyframes din { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
-
-/* ════════════════════════════════
-   ESSENTIALS
-════════════════════════════════ */
-.ew { padding: 16px 20px 20px; }
-.est {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 20px; font-weight: 300; font-style: italic;
-  color: var(--mint); margin-bottom: 10px; margin-top: 6px;
-}
-.ec {
-  background: var(--ink3); border: .5px solid var(--ink4);
-  border-radius: 14px; padding: 12px 14px; margin-bottom: 8px;
-  cursor: pointer; overflow: hidden; transition: border-color .2s;
-}
-.ec.on { border-color: rgba(58,158,106,.3); }
-.ech { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.ect { font-size: 13px; font-weight: 500; color: var(--cream); }
-.ecv { flex-shrink: 0; width: 15px; height: 15px; stroke: var(--dim); fill: none; stroke-width: 2; stroke-linecap: round; transition: transform .3s, stroke .2s; }
-.ec.on .ecv { transform: rotate(180deg); stroke: var(--mint); }
-.ecb { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .35s cubic-bezier(.4,0,.2,1), opacity .25s ease; }
-.ec.on .ecb { max-height: 400px; opacity: 1; }
-.ecx { font-size: 12.5px; font-weight: 300; color: var(--fog); line-height: 1.65; padding-top: 9px; border-top: .5px solid var(--ink4); margin-top: 9px; }
-.ecx strong { color: var(--cream); font-weight: 500; }
-.ecx a { color: var(--mint); text-decoration: none; }
-.edv { height: .5px; background: var(--ink4); margin: 14px 0; }
-
-/* ════════════════════════════════
-   GUIDE
-════════════════════════════════ */
-#guide-out { display: none; flex-direction: column; height: 100dvh; overflow: hidden; background: var(--ink); }
-.gst {
-  display: flex; overflow-x: auto; gap: 0; scrollbar-width: none;
-  background: var(--ink2); border-bottom: .5px solid rgba(255,255,255,.05);
-  flex-shrink: 0; margin-top: calc(var(--st) + 62px);
-}
-.gst::-webkit-scrollbar { display: none; }
-.gsb {
-  flex-shrink: 0; padding: 10px 16px 13px; border: none; background: transparent;
-  font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 400;
-  color: var(--dim); cursor: pointer; position: relative; transition: color .2s;
-}
-.gsb::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 1.5px; background: var(--mint); border-radius: 2px; transition: width .3s; }
-.gsb.on { color: var(--cream); }
-.gsb.on::after { width: 18px; }
-.gs-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-.gs { display: none; padding: 14px 20px 20px; animation: din .3s ease; }
-.gs.on { display: block; }
-
-/* ════════════════════════════════
-   ANIMATIONS
-════════════════════════════════ */
-@keyframes fu { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-/* chevron svg shorthand */
-.svg-chv { pointer-events: none; }
-.ext-icon { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* ext link icon shorthand */
+.xi{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
 
-<!-- ════════════════════ COVER ════════════════════ -->
+<!-- ══ COVER ══ -->
 <div id="cover">
-  <div class="cover-bg"></div>
+  <div class="cover-art"><!-- Parliament night skyline -->
+<svg viewBox="0 0 400 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#020408"/><stop offset="40%" stop-color="#06101a"/><stop offset="100%" stop-color="#0a1820"/></linearGradient>
+    <linearGradient id="wt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0c1828"/><stop offset="100%" stop-color="#060c14"/></linearGradient>
+    <filter id="bl3"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="bl6"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+  <rect width="400" height="700" fill="url(#sky)"/>
+  <!-- stars -->
+  <g opacity=".85" fill="#fff" class="sparkle">
+    <circle cx="30" cy="40" r=".9"/><circle cx="75" cy="22" r=".7"/><circle cx="130" cy="55" r=".8"/><circle cx="185" cy="28" r=".6"/><circle cx="240" cy="48" r=".9"/><circle cx="295" cy="18" r=".7"/><circle cx="350" cy="38" r=".8"/><circle cx="370" cy="65" r=".6"/><circle cx="55" cy="85" r=".7"/><circle cx="155" cy="78" r=".6"/><circle cx="260" cy="90" r=".8"/><circle cx="340" cy="72" r=".5"/>
+  </g>
+  <!-- ambient glow -->
+  <ellipse cx="120" cy="320" rx="180" ry="80" fill="#c9963a" opacity=".05" filter="url(#bl6)"/>
+  <ellipse cx="300" cy="250" rx="100" ry="60" fill="#3a9e6a" opacity=".03" filter="url(#bl6)"/>
+  <!-- moon glow -->
+  <circle cx="330" cy="70" r="22" fill="#1a3020" opacity=".5"/>
+  <circle cx="330" cy="70" r="16" fill="#c8b87a" opacity=".15"/>
+  <!-- horizon warm glow -->
+  <ellipse cx="200" cy="370" rx="220" ry="50" fill="#daa040" opacity=".15" filter="url(#bl6)"><animate attributeName="opacity" values=".12;.2;.12" dur="5s" repeatCount="indefinite"/></ellipse>
+  <!-- Parliament -->
+  <g filter="url(#bl3)" opacity=".02"><rect x="60" y="265" width="280" height="85" fill="#f0d080"/></g>
+  <rect x="60" y="265" width="280" height="85" fill="#081020" stroke="#daa040" stroke-width=".6"/>
+  <!-- central dome -->
+  <rect x="158" y="242" width="84" height="26" fill="#081018" stroke="#daa040" stroke-width=".5"/>
+  <ellipse cx="200" cy="240" rx="38" ry="12" fill="#172a18" stroke="#daa040" stroke-width=".6"/>
+  <ellipse cx="200" cy="228" rx="28" ry="22" fill="#081018" stroke="#daa040" stroke-width=".6"/>
+  <ellipse cx="200" cy="214" rx="18" ry="16" fill="#081018" stroke="#daa040" stroke-width=".5"/>
+  <line x1="200" y1="198" x2="200" y2="170" stroke="#daa040" stroke-width="1.5"/>
+  <circle cx="200" cy="168" r="3.5" fill="#f0d080"/>
+  <!-- left main tower -->
+  <rect x="72" y="228" width="22" height="40" fill="#081018" stroke="#daa040" stroke-width=".5"/>
+  <polygon points="72,228 83,205 94,228" fill="#0e1a0c" stroke="#daa040" stroke-width=".5"/>
+  <line x1="83" y1="205" x2="83" y2="188" stroke="#daa040" stroke-width="1.2"/>
+  <circle cx="83" cy="186" r="2.8" fill="#f0d080"/>
+  <!-- right main tower -->
+  <rect x="306" y="228" width="22" height="40" fill="#152212" stroke="#daa040" stroke-width=".5"/>
+  <polygon points="306,228 317,205 328,228" fill="#0e1a0c" stroke="#daa040" stroke-width=".5"/>
+  <line x1="317" y1="205" x2="317" y2="188" stroke="#daa040" stroke-width="1.2"/>
+  <circle cx="317" cy="186" r="2.8" fill="#f0d080"/>
+  <!-- minor towers -->
+  <rect x="108" y="242" width="14" height="26" fill="#122010" stroke="#daa040" stroke-width=".4"/>
+  <polygon points="108,242 115,225 122,242" fill="#081018" stroke="#daa040" stroke-width=".4"/>
+  <line x1="115" y1="225" x2="115" y2="214" stroke="#daa040" stroke-width=".9"/>
+  <rect x="278" y="242" width="14" height="26" fill="#122010" stroke="#daa040" stroke-width=".4"/>
+  <polygon points="278,242 285,225 292,242" fill="#0e1808" stroke="#daa040" stroke-width=".4"/>
+  <line x1="285" y1="225" x2="285" y2="214" stroke="#daa040" stroke-width=".9"/>
+  <!-- windows -->
+  <g fill="#e8c07a" opacity=".65">
+    <rect x="76" y="278" width="6" height="10" rx="3"/><rect x="91" y="278" width="6" height="10" rx="3"/><rect x="108" y="278" width="6" height="10" rx="3"/><rect x="124" y="278" width="6" height="10" rx="3"/><rect x="140" y="278" width="6" height="10" rx="3"/><rect x="158" y="278" width="6" height="10" rx="3"/><rect x="174" y="278" width="6" height="10" rx="3"/><rect x="191" y="278" width="8" height="13" rx="4"/><rect x="201" y="278" width="8" height="13" rx="4"/><rect x="218" y="278" width="6" height="10" rx="3"/><rect x="234" y="278" width="6" height="10" rx="3"/><rect x="250" y="278" width="6" height="10" rx="3"/><rect x="266" y="278" width="6" height="10" rx="3"/><rect x="282" y="278" width="6" height="10" rx="3"/><rect x="298" y="278" width="6" height="10" rx="3"/><rect x="314" y="278" width="6" height="10" rx="3"/>
+  </g>
+  <!-- warm glow beneath building -->
+  <rect x="55" y="345" width="290" height="6" fill="url(#wt)" opacity=".5" filter="url(#bl3)"/>
+  <!-- Danube -->
+  <rect x="0" y="352" width="400" height="120" fill="url(#wt)"/>
+  <!-- parliament reflection in water -->
+  <g opacity=".3" filter="url(#bl3)" transform="translate(0,700) scale(1,-1)">
+    <rect x="60" y="265" width="280" height="85" fill="#f0d080"/>
+    <ellipse cx="200" cy="228" rx="28" ry="22" fill="#f0d080"/>
+    <line x1="200" y1="198" x2="200" y2="170" stroke="#c9963a" stroke-width="2.5"/>
+    <line x1="83" y1="205" x2="83" y2="188" stroke="#c9963a" stroke-width="2"/>
+    <line x1="317" y1="205" x2="317" y2="188" stroke="#c9963a" stroke-width="2"/>
+  </g>
+  <!-- water lines -->
+  <g stroke="#3a7a5a" fill="none" opacity=".3" stroke-width=".6">
+    <path d="M0,365 Q200,360 400,365"/><path d="M0,378 Q200,373 400,378"/><path d="M0,392 Q200,387 400,392"/><path d="M0,408 Q200,403 400,408"/>
+  </g>
+  <!-- city silhouettes -->
+  <g fill="#0e1a10" opacity=".8"><rect x="0" y="300" width="55" height="55"/><rect x="345" y="295" width="55" height="60"/></g>
+</svg>
+  </div>
   <div class="cover-grad"></div>
   <div class="cover-content">
     <div class="c-eye">Ungheria · Aprile 2025</div>
@@ -442,7 +296,8 @@ body { background: var(--ink); color: var(--cream); font-family: 'Outfit', sans-
     <div class="c-sub">4 — 7 Aprile · Alice Hotel</div>
     <div class="c-meta">
       <div class="c-pill">🇭🇺 3 notti</div>
-      <div class="c-pill">✈️ Volo 22:00 lun</div>
+      <div class="c-pill">✈️ Rientro lun 22:00</div>
+      <div class="c-pill">🏨 4 stelle · centro</div>
     </div>
     <button class="c-btn" onclick="startApp()">
       Apri il piano
@@ -451,22 +306,20 @@ body { background: var(--ink); color: var(--cream); font-family: 'Outfit', sans-
   </div>
 </div>
 
-<!-- ════════════════════ APP ════════════════════ -->
+<!-- ══ APP ══ -->
 <div id="app">
-  <!-- Fixed header -->
   <div class="hdr" id="hdr">
-    <div class="hdr-left">
+    <div>
       <div class="h-title">Buda<em>pest</em></div>
       <div class="h-sub">4 – 7 Aprile · Alice Hotel</div>
     </div>
-    <div class="h-badge">🇭🇺</div>
+    <div class="h-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg></div>
   </div>
 
-  <!-- Scroll container -->
   <div id="scroll-area">
     <div class="hdr-spacer"></div>
 
-    <!-- ──── ITINERARY ──── -->
+    <!-- ════ ITINERARY ════ -->
     <div id="tab-itin">
       <div class="pills-wrap">
         <div class="pills">
@@ -477,304 +330,283 @@ body { background: var(--ink); color: var(--cream); font-family: 'Outfit', sans-
         </div>
       </div>
 
-      <!-- VENERDÌ -->
+      <!-- ── VENERDÌ ── -->
       <div id="d0" class="day-section on">
         <div class="day-hero">
-          <img src="https://images.unsplash.com/photo-1585506942812-e72b29cef752?w=800&q=75" alt="Budapest Parlamento" loading="lazy">
-          <div class="day-hero-grad"></div>
-          <div class="day-hero-label">
-            <div class="dht">Arrivo & <em>Pest</em></div>
-            <div class="dhs">Check-in · Brunch · Danubio · Ruin bar</div>
-          </div>
+          <!-- Hero: Budapest pest skyline night -->
+          <svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sk0" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#020306"/><stop offset="100%" stop-color="#08060e"/></linearGradient>
+    <linearGradient id="neon1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ff2060"/><stop offset="100%" stop-color="#ff6040"/></linearGradient>
+    <linearGradient id="neon2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#20c0ff"/><stop offset="100%" stop-color="#60e0ff"/></linearGradient>
+    <filter id="ng"><feGaussianBlur stdDeviation="4"/></filter>
+    <filter id="ng2"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="ns"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>
+  <rect width="400" height="210" fill="url(#sk0)"/>
+  <!-- distant city ambient -->
+  <ellipse cx="200" cy="180" rx="250" ry="60" fill="#ff2060" opacity=".03" filter="url(#ng2)"/>
+  <!-- old buildings — irregular rooflines (ruin bar district) -->
+  <g fill="#0a0810"><rect x="0" y="60" width="55" height="150"/><rect x="58" y="50" width="48" height="160"/><rect x="109" y="58" width="42" height="152"/><rect x="154" y="45" width="52" height="165"/><rect x="209" y="55" width="44" height="155"/><rect x="256" y="48" width="50" height="162"/><rect x="309" y="52" width="46" height="158"/><rect x="358" y="42" width="42" height="168"/></g>
+  <!-- crumbling roofline details -->
+  <g fill="#0e0c14"><polygon points="0,60 28,42 55,60"/><polygon points="58,50 82,32 106,50"/><polygon points="154,45 180,28 206,45"/><polygon points="256,48 281,30 306,48"/><polygon points="358,42 379,26 400,42"/></g>
+  <!-- windows — warm yellow scattered randomly -->
+  <g fill="#f0c050" opacity=".7"><rect x="10" y="75" width="4" height="6" rx="1"/><rect x="22" y="90" width="4" height="6" rx="1"/><rect x="38" y="72" width="4" height="6" rx="1"/><rect x="68" y="68" width="5" height="7" rx="1"/><rect x="85" y="82" width="4" height="6" rx="1"/><rect x="120" y="75" width="4" height="6" rx="1"/><rect x="135" y="88" width="4" height="6" rx="1"/><rect x="165" y="62" width="5" height="7" rx="1"/><rect x="180" y="78" width="4" height="6" rx="1"/><rect x="220" y="72" width="4" height="6" rx="1"/><rect x="238" y="86" width="4" height="6" rx="1"/><rect x="270" y="66" width="5" height="7" rx="1"/><rect x="290" y="80" width="4" height="6" rx="1"/><rect x="322" y="70" width="4" height="6" rx="1"/><rect x="340" y="84" width="4" height="6" rx="1"/><rect x="370" y="60" width="4" height="6" rx="1"/><rect x="385" y="76" width="4" height="6" rx="1"/></g>
+  <!-- NEON SIGN 1 — "SZIMPLA" glow (pink/red) -->
+  <g filter="url(#ng)"><rect x="60" y="95" width="80" height="18" rx="4" fill="#ff2060" opacity=".2"><animate attributeName="opacity" values=".15;.3;.15" dur="3s" repeatCount="indefinite"/></rect></g>
+  <rect x="65" y="98" width="70" height="12" rx="3" fill="none" stroke="url(#neon1)" stroke-width="1.2" opacity=".8"><animate attributeName="opacity" values=".6;1;.6" dur="3s" repeatCount="indefinite"/></rect>
+  <!-- NEON SIGN 2 — blue bar sign -->
+  <g filter="url(#ng)"><rect x="265" y="88" width="65" height="16" rx="4" fill="#20c0ff" opacity=".18"><animate attributeName="opacity" values=".12;.25;.12" dur="4.2s" repeatCount="indefinite"/></rect></g>
+  <rect x="270" y="91" width="55" height="10" rx="3" fill="none" stroke="url(#neon2)" stroke-width="1" opacity=".75"><animate attributeName="opacity" values=".5;.9;.5" dur="4.2s" repeatCount="indefinite"/></rect>
+  <!-- NEON SIGN 3 — small green -->
+  <g filter="url(#ns)"><circle cx="185" cy="100" r="10" fill="#4af0d8" opacity=".1"><animate attributeName="opacity" values=".08;.18;.08" dur="2.5s" repeatCount="indefinite"/></circle></g>
+  <circle cx="185" cy="100" r="7" fill="none" stroke="#4af0d8" stroke-width=".8" opacity=".6"><animate attributeName="opacity" values=".4;.8;.4" dur="2.5s" repeatCount="indefinite"/></circle>
+  <!-- STRING LIGHTS across buildings -->
+  <g stroke="#f0c050" stroke-width=".5" fill="none" opacity=".6"><path d="M30,58 Q65,65 100,55 Q140,64 175,52 Q210,60 245,54 Q280,62 315,50 Q350,58 385,48"/></g>
+  <!-- light bulbs on string -->
+  <g fill="#f0c050"><circle cx="30" cy="58" r="2" opacity=".9"><animate attributeName="opacity" values=".7;1;.7" dur="2s" repeatCount="indefinite"/></circle><circle cx="65" cy="63" r="1.8" opacity=".8"/><circle cx="100" cy="55" r="2" opacity=".9"><animate attributeName="opacity" values=".6;1;.6" dur="2.8s" repeatCount="indefinite"/></circle><circle cx="140" cy="62" r="1.8" opacity=".7"/><circle cx="175" cy="52" r="2" opacity=".9"><animate attributeName="opacity" values=".7;1;.7" dur="3.2s" repeatCount="indefinite"/></circle><circle cx="210" cy="58" r="1.8" opacity=".8"/><circle cx="245" cy="54" r="2" opacity=".85"><animate attributeName="opacity" values=".6;.95;.6" dur="2.4s" repeatCount="indefinite"/></circle><circle cx="280" cy="60" r="1.8" opacity=".7"/><circle cx="315" cy="50" r="2" opacity=".9"/><circle cx="350" cy="56" r="1.8" opacity=".8"><animate attributeName="opacity" values=".5;.9;.5" dur="3.5s" repeatCount="indefinite"/></circle><circle cx="385" cy="48" r="2" opacity=".85"/></g>
+  <!-- street glow at bottom -->
+  <rect x="0" y="155" width="400" height="55" fill="#08060e"/>
+  <g fill="#ff2060" opacity=".04" filter="url(#ng2)"><ellipse cx="100" cy="165" rx="80" ry="20"/></g>
+  <g fill="#20c0ff" opacity=".04" filter="url(#ng2)"><ellipse cx="300" cy="165" rx="70" ry="18"/></g>
+  <!-- cobblestone texture hint -->
+  <g fill="#ffffff" opacity=".03"><circle cx="20" cy="170" r="1.5"/><circle cx="35" cy="175" r="1.2"/><circle cx="52" cy="168" r="1.4"/><circle cx="70" cy="178" r="1.3"/><circle cx="90" cy="172" r="1.5"/><circle cx="110" cy="176" r="1.2"/><circle cx="130" cy="169" r="1.4"/><circle cx="150" cy="174" r="1.3"/><circle cx="170" cy="180" r="1.2"/><circle cx="195" cy="171" r="1.5"/><circle cx="215" cy="177" r="1.3"/><circle cx="240" cy="170" r="1.4"/><circle cx="260" cy="176" r="1.2"/><circle cx="285" cy="172" r="1.5"/><circle cx="310" cy="178" r="1.3"/><circle cx="335" cy="170" r="1.4"/><circle cx="360" cy="175" r="1.2"/><circle cx="385" cy="172" r="1.5"/></g>
+  <!-- stars above -->
+  <g fill="#fff" opacity=".5"><circle cx="25" cy="12" r=".7"/><circle cx="95" cy="8" r=".5"/><circle cx="175" cy="15" r=".6"/><circle cx="250" cy="6" r=".7"/><circle cx="330" cy="18" r=".5"/><circle cx="390" cy="10" r=".6"/></g>
+</svg>
+          <div class="hero-grad"></div>
+          <div class="day-label"><div class="dht">Arrivo & <em>Pest</em></div><div class="dhs">Check-in · Brunch · Danubio · Ruin bar</div></div>
         </div>
-        <div class="lgr">
-          <div class="lg lg-s"><div class="lgdot"></div>Attrazioni</div>
-          <div class="lg lg-f"><div class="lgdot"></div>Cibo & drink</div>
-          <div class="lg lg-n"><div class="lgdot"></div>Serata</div>
-          <div class="lg lg-h"><div class="lgdot"></div>Hotel</div>
-        </div>
+        <div class="lgr"><div class="lg lg-s"><div class="lgdot"></div>Attrazioni</div><div class="lg lg-f"><div class="lgdot"></div>Cibo</div><div class="lg lg-n"><div class="lgdot"></div>Serata</div><div class="lg lg-h"><div class="lgdot"></div>Hotel</div></div>
         <div class="tl">
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div>
-            <div class="card">
-              <div class="cah"><div class="cal"><div class="can">Arrivo & check-in Alice Hotel</div><div class="cat">Mattina</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Depositate i bagagli se è presto. Siete in centro — tutto a piedi. Posizione perfetta per raggiungere qualsiasi attrazione.</div><div class="tags"><span class="tag tr">Hotel 4★</span><span class="tag tr">Centro Pest</span></div></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Check-in Alice Hotel</div><div class="cat">Mattina</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Depositate i bagagli se è presto — siete in centro, tutto raggiungibile a piedi. Posizione perfetta: 5 min dal Danubio, 10 min dal Parlamento.</div><div class="tags"><span class="tag tr">Hotel 4★ · centro Pest</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Alice+Hotel+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div>
-            <div class="card ac-f">
-              <div class="cah"><div class="cal"><div class="can">Cookie Beacon — brunch</div><div class="cat">09:30 – 11:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi">
-                <img class="card-img" src="https://images.unsplash.com/photo-1550617931-e17a7b70dce2?w=600&q=70" alt="Brunch" loading="lazy">
-                <div class="cad" style="margin-top:10px">Il brunch più virale di Budapest — tutto da zero ogni giorno. Uova Benedict, French toast, chunky cookies artigianali. <strong>Apre alle 8:00 nei feriali</strong> — nessuna prenotazione, arrivate subito.</div>
-                <div class="tags"><span class="tag tb">★ Must try</span><span class="tag tr">Hercegprímás u. 15</span><span class="tag tr">€€</span></div>
-                <a class="blink bl-blue" href="https://www.cookiebeacon.com" target="_blank">Sito web <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a>
-              </div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Cookie Beacon — brunch</div><div class="cat">09:30 – 11:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Il brunch più virale di Budapest — tutto da zero ogni giorno. Uova Benedict, French toast, chunky cookies artigianali. <strong>Apre alle 8:00 nei feriali</strong> — no prenotazioni, arrivate subito.</div><div class="tags"><span class="tag tb">★ Must try</span><span class="tag tr">Hercegprímás u. 15</span><span class="tag tr">€€</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Cookie+Beacon+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://www.cookiebeacon.com" target="_blank">Sito web <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div>
-            <div class="card ac-s">
-              <div class="cah"><div class="cal"><div class="can">Passeggiata Danubio & Parlamento</div><div class="cat">11:00 – 12:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Dal Cookie Beacon a 5 min a piedi dal fiume. Vista sul Parlamento — imponente di giorno, magico illuminato di notte. Una delle passeggiate più belle d'Europa.</div><div class="tags"><span class="tag tg">Gratis</span><span class="tag tg">Fotografico</span></div></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Passeggiata Danubio & Parlamento</div><div class="cat">11:00 – 12:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Dal Cookie Beacon a 5 min a piedi dal fiume. Vista sul Parlamento — imponente di giorno, magico illuminato di notte. Tram 2 lungo il lungofiume per tornare.</div><div class="tags"><span class="tag tg">Gratis</span><span class="tag tg">Fotografico</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Kossuth+Lajos+ter+Budapest" target="_blank">Maps Parlamento <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div>
-            <div class="card ac-s">
-              <div class="cah"><div class="cal"><div class="can">Vörösmarty tér & Váci utca</div><div class="cat">15:00 – 17:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Piazza elegante con il leggendario caffè Gerbeaud aperto dal 1858. Da lì parte Váci utca per shopping e souvenir.</div><div class="tags"><span class="tag tg">Shopping</span><span class="tag tg">Souvenir</span></div></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Vörösmarty tér & Váci utca</div><div class="cat">15:00 – 17:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Piazza elegante con il leggendario caffè Gerbeaud dal 1858. Da lì parte Váci utca per shopping e souvenir. Il Grande Mercato Coperto è a 10 min a piedi.</div><div class="tags"><span class="tag tg">Shopping</span><span class="tag tg">Souvenir</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Vörösmarty+tér+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://maps.google.com/?q=Gerbeaud+Budapest" target="_blank">Gerbeaud <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div>
-            <div class="card ac-f">
-              <div class="cah"><div class="cal"><div class="can">Aperitivo — Párisi Udvar</div><div class="cat">17:30 – 19:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Galleria Art Nouveau del 1909, oggi lobby dell'Hyatt. Cupola di vetro colorato e mosaici mozzafiato. Un cocktail qui vale il ricordo. A 5 min dall'Alice Hotel.</div><div class="tags"><span class="tag tgold">★ Imperdibile</span><span class="tag tr">Ferenciek tere 10</span></div><a class="blink bl-blue" href="https://maps.google.com/?q=Parisi+Udvar+Budapest" target="_blank">Apri in Maps <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Aperitivo — Párisi Udvar</div><div class="cat">17:30 – 19:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Galleria Art Nouveau del 1909, oggi lobby Hyatt. Cupola di vetro colorato, mosaici straordinari. Un cocktail qui vale il viaggio. A 5 min dall'Alice Hotel.</div><div class="tags"><span class="tag tgold">★ Imperdibile</span><span class="tag tr">Ferenciek tere 10</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Parisi+Udvar+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://parisudvarhotel.com" target="_blank">Sito hotel <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div>
-            <div class="card">
-              <div class="cah"><div class="cal"><div class="can">Cena — Hungarikum Bisztrò</div><div class="cat">19:30 – 21:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Cucina ungherese autentica: goulash, anatra arrosto, paprikash. Ambiente caldo, prenotazione consigliata.</div><div class="tags"><span class="tag tb">Cucina HU</span><span class="tag tr">€€</span></div><a class="blink bl-green" href="https://hungarikumbisztro.hu" target="_blank">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Cena — Hungarikum Bisztrò</div><div class="cat">19:30 – 21:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Cucina ungherese autentica: goulash, anatra arrosto, paprikash di pollo. Ambiente caldo. Prenotazione consigliata.</div><div class="tags"><span class="tag tb">Cucina HU</span><span class="tag tr">€€</span></div><div class="links"><a class="lnk lnk-g" href="https://hungarikumbisztro.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Hungarikum+Bisztro+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-n"></div><div class="seg seg-n"></div></div>
-            <div class="card ac-n">
-              <div class="cah"><div class="cal"><div class="can">Szimpla Kert — ruin bar</div><div class="cat">21:30 →</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi">
-                <img class="card-img" src="https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=600&q=70" alt="Ruin bar" loading="lazy">
-                <div class="cad" style="margin-top:10px">Il ruin bar più iconico del mondo — fabbrica abbandonata con 20+ stanze, arte ovunque, musica. Esplorate tutto prima di sedervi. Birra locale ~3€.</div>
-                <div class="tags"><span class="tag tp">Vita notturna</span><span class="tag tp">Fino alle 4:00</span></div>
-                <a class="blink bl-blue" href="https://szimpla.hu" target="_blank">Sito ufficiale <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a>
-              </div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-n"></div><div class="seg seg-n"></div></div><div class="card ac-n"><div class="cah"><div class="cal"><div class="can">Szimpla Kert — ruin bar</div><div class="cat">21:30 →</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Il ruin bar più iconico del mondo — fabbrica abbandonata, 20+ stanze, arte ovunque, musica. Esplorate tutto prima di sedervi. Birra locale ~3€.</div><div class="tags"><span class="tag tp">Vita notturna</span><span class="tag tp">Fino alle 4:00</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Szimpla+Kert+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://szimpla.hu" target="_blank">Sito web <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
         </div>
-        <div class="tip-box">💡 <strong>Cookie Beacon:</strong> venerdì apre alle 8:00 — arrivate subito, nessuna coda. Weekend: fila 30-60 min, solo all'apertura (9:00) si evita.</div>
+        <div class="tip-box">💡 <strong>Cookie Beacon:</strong> venerdì apre alle 8:00 — arrivate subito. Weekend: fila 30-60 min, solo all'apertura (9:00) si evita.</div>
       </div>
 
-      <!-- SABATO -->
+      <!-- ── SABATO ── -->
       <div id="d1" class="day-section">
         <div class="day-hero">
-          <img src="https://images.unsplash.com/photo-1578895101408-1a36b5cb05cc?w=800&q=75" alt="Terme Budapest" loading="lazy">
-          <div class="day-hero-grad"></div>
-          <div class="day-hero-label">
-            <div class="dht">Terme & <em>Isola</em></div>
-            <div class="dhs">Széchenyi · Margherita in bici · Buda al tramonto</div>
-          </div>
+          <!-- Hero: Szechenyi baths neo-baroque -->
+          <svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sk1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#021518"/><stop offset="100%" stop-color="#041820"/></linearGradient>
+    <linearGradient id="wtr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a4858"/><stop offset="50%" stop-color="#0c5a6a"/><stop offset="100%" stop-color="#063848"/></linearGradient>
+    <radialGradient id="caust" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#40e8ff" stop-opacity=".12"/><stop offset="100%" stop-color="#40e8ff" stop-opacity="0"/></radialGradient>
+    <filter id="wbl"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="wbl2"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="wbl3"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+  <!-- entire scene is the pool — immersive water view -->
+  <rect width="400" height="210" fill="url(#wtr)"/>
+  <!-- deep underwater glow -->
+  <ellipse cx="200" cy="140" rx="220" ry="80" fill="#20a0c0" opacity=".06" filter="url(#wbl3)"/>
+  <!-- caustic light patterns dancing on the water -->
+  <g opacity=".15"><ellipse cx="80" cy="80" rx="50" ry="35" fill="url(#caust)"><animate attributeName="cx" values="80;110;80" dur="8s" repeatCount="indefinite"/><animate attributeName="cy" values="80;95;80" dur="6s" repeatCount="indefinite"/><animate attributeName="rx" values="50;65;50" dur="7s" repeatCount="indefinite"/></ellipse><ellipse cx="250" cy="100" rx="60" ry="40" fill="url(#caust)"><animate attributeName="cx" values="250;220;250" dur="9s" repeatCount="indefinite"/><animate attributeName="cy" values="100;115;100" dur="7s" repeatCount="indefinite"/><animate attributeName="rx" values="60;75;60" dur="8s" repeatCount="indefinite"/></ellipse><ellipse cx="350" cy="60" rx="40" ry="30" fill="url(#caust)"><animate attributeName="cx" values="350;330;350" dur="7s" repeatCount="indefinite"/><animate attributeName="cy" values="60;75;60" dur="5.5s" repeatCount="indefinite"/></ellipse><ellipse cx="150" cy="150" rx="55" ry="35" fill="url(#caust)"><animate attributeName="cx" values="150;175;150" dur="10s" repeatCount="indefinite"/><animate attributeName="cy" values="150;135;150" dur="8s" repeatCount="indefinite"/></ellipse></g>
+  <!-- ripple rings -->
+  <g fill="none" stroke="#60e0ff" stroke-width=".4" opacity=".2"><circle cx="120" cy="90" r="20"><animate attributeName="r" values="5;40;5" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".3;0;.3" dur="6s" repeatCount="indefinite"/></circle><circle cx="280" cy="110" r="15"><animate attributeName="r" values="5;35;5" dur="5s" repeatCount="indefinite" begin="2s"/><animate attributeName="opacity" values=".25;0;.25" dur="5s" repeatCount="indefinite" begin="2s"/></circle><circle cx="200" cy="140" r="10"><animate attributeName="r" values="5;45;5" dur="7s" repeatCount="indefinite" begin="1s"/><animate attributeName="opacity" values=".2;0;.2" dur="7s" repeatCount="indefinite" begin="1s"/></circle></g>
+  <!-- slow surface waves -->
+  <g stroke="#50d0e8" fill="none" opacity=".18" stroke-width=".8"><path d="M0,50 Q50,42 100,50 Q150,58 200,50 Q250,42 300,50 Q350,58 400,50"><animate attributeName="d" values="M0,50 Q50,42 100,50 Q150,58 200,50 Q250,42 300,50 Q350,58 400,50;M0,50 Q50,58 100,50 Q150,42 200,50 Q250,58 300,50 Q350,42 400,50;M0,50 Q50,42 100,50 Q150,58 200,50 Q250,42 300,50 Q350,58 400,50" dur="5s" repeatCount="indefinite"/></path><path d="M0,90 Q60,82 120,90 Q180,98 240,90 Q300,82 360,90 Q390,95 400,90"><animate attributeName="d" values="M0,90 Q60,82 120,90 Q180,98 240,90 Q300,82 360,90 Q390,95 400,90;M0,90 Q60,98 120,90 Q180,82 240,90 Q300,98 360,90 Q390,85 400,90;M0,90 Q60,82 120,90 Q180,98 240,90 Q300,82 360,90 Q390,95 400,90" dur="6.5s" repeatCount="indefinite"/></path><path d="M0,130 Q80,122 160,130 Q240,138 320,130 Q380,124 400,130"><animate attributeName="d" values="M0,130 Q80,122 160,130 Q240,138 320,130 Q380,124 400,130;M0,130 Q80,138 160,130 Q240,122 320,130 Q380,136 400,130;M0,130 Q80,122 160,130 Q240,138 320,130 Q380,124 400,130" dur="8s" repeatCount="indefinite"/></path><path d="M0,170 Q100,164 200,170 Q300,176 400,170"><animate attributeName="d" values="M0,170 Q100,164 200,170 Q300,176 400,170;M0,170 Q100,176 200,170 Q300,164 400,170;M0,170 Q100,164 200,170 Q300,176 400,170" dur="7s" repeatCount="indefinite"/></path></g>
+  <!-- floating steam wisps at top -->
+  <g fill="#80e0f0" opacity=".04" filter="url(#wbl2)"><ellipse cx="60" cy="20" rx="50" ry="25"><animate attributeName="cy" values="20;10;20" dur="8s" repeatCount="indefinite"/><animate attributeName="opacity" values=".03;.07;.03" dur="8s" repeatCount="indefinite"/></ellipse><ellipse cx="200" cy="15" rx="70" ry="30"><animate attributeName="cy" values="15;5;15" dur="10s" repeatCount="indefinite"/><animate attributeName="opacity" values=".02;.06;.02" dur="10s" repeatCount="indefinite"/></ellipse><ellipse cx="340" cy="18" rx="55" ry="22"><animate attributeName="cy" values="18;8;18" dur="9s" repeatCount="indefinite"/></ellipse></g>
+  <!-- subtle golden light from building above (reflected) -->
+  <ellipse cx="200" cy="10" rx="160" ry="15" fill="#daa040" opacity=".05" filter="url(#wbl)"/>
+  <!-- tiny bubbles -->
+  <g fill="#80e8ff" opacity=".25"><circle cx="90" cy="120" r="1.5"><animate attributeName="cy" values="120;100;80;60" dur="4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".3;.2;.1;0" dur="4s" repeatCount="indefinite"/></circle><circle cx="220" cy="150" r="1"><animate attributeName="cy" values="150;125;100;75" dur="5s" repeatCount="indefinite" begin="1.5s"/><animate attributeName="opacity" values=".25;.15;.08;0" dur="5s" repeatCount="indefinite" begin="1.5s"/></circle><circle cx="310" cy="130" r="1.2"><animate attributeName="cy" values="130;108;85;60" dur="4.5s" repeatCount="indefinite" begin="3s"/><animate attributeName="opacity" values=".3;.18;.08;0" dur="4.5s" repeatCount="indefinite" begin="3s"/></circle><circle cx="160" cy="160" r=".8"><animate attributeName="cy" values="160;135;110;85" dur="5.5s" repeatCount="indefinite" begin=".5s"/><animate attributeName="opacity" values=".2;.12;.05;0" dur="5.5s" repeatCount="indefinite" begin=".5s"/></circle></g>
+</svg>
+          <div class="hero-grad"></div>
+          <div class="day-label"><div class="dht">Terme & <em>Isola</em></div><div class="dhs">Széchenyi · Margherita in bici · Buda al tramonto</div></div>
         </div>
-        <div class="lgr">
-          <div class="lg lg-s"><div class="lgdot"></div>Attrazioni</div>
-          <div class="lg lg-f"><div class="lgdot"></div>Cibo & drink</div>
-          <div class="lg lg-a"><div class="lgdot"></div>Terme</div>
-          <div class="lg lg-h"><div class="lgdot"></div>Hotel</div>
-        </div>
+        <div class="lgr"><div class="lg lg-s"><div class="lgdot"></div>Attrazioni</div><div class="lg lg-f"><div class="lgdot"></div>Cibo</div><div class="lg lg-a"><div class="lgdot"></div>Terme</div></div>
         <div class="tl">
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div>
-            <div class="card">
-              <div class="cah"><div class="cal"><div class="can">Colazione in hotel</div><div class="cat">08:00 – 08:45</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Inclusa. Mangiate bene — mattinata alle terme.</div><div class="tags"><span class="tag tr">Inclusa</span></div></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Colazione in hotel</div><div class="cat">08:00 – 08:45</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Inclusa. Mangiate bene — mattinata alle terme.</div><div class="tags"><span class="tag tr">Inclusa</span></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-a"></div><div class="seg seg-a"></div></div>
-            <div class="card ac-a">
-              <div class="cah"><div class="cal"><div class="can">Terme Széchenyi</div><div class="cat">09:00 – 12:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi">
-                <img class="card-img" src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=600&q=70" alt="Terme Szechenyi" loading="lazy">
-                <div class="cad" style="margin-top:10px">Palazzo neo-barocco 1913 — le terme più grandi d'Europa. 3 piscine esterne, 15 interne. Di mattina luce bellissima e poca folla. <strong>Prenotate online!</strong> Portate cuffia, ciabatte, asciugamano.</div>
-                <div class="tags"><span class="tag ta">★ Iconiche</span><span class="tag ta">Apre 8:00 sab</span><span class="tag tr">~35€</span></div>
-                <a class="blink bl-orange" href="https://www.szechenyifurdo.hu" target="_blank">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a>
-              </div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-a"></div><div class="seg seg-a"></div></div><div class="card ac-a"><div class="cah"><div class="cal"><div class="can">Terme Széchenyi</div><div class="cat">09:00 – 12:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Palazzo neo-barocco 1913 — le terme più grandi d'Europa. 3 piscine esterne, 15 interne. Di mattina poca folla. <strong>Prenotate online!</strong> Portate cuffia (obbligatoria), ciabatte, asciugamano.</div><div class="tags"><span class="tag ta">★ Iconiche</span><span class="tag ta">Apre 8:00 sab</span><span class="tag tr">~35€</span></div><div class="links"><a class="lnk lnk-o" href="https://www.szechenyifurdo.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Szechenyi+Thermal+Bath+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div>
-            <div class="card ac-s">
-              <div class="cah"><div class="cal"><div class="can">Isola Margherita in bicicletta</div><div class="cat">12:30 – 14:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi">
-                <img class="card-img" src="https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=600&q=70" alt="Isola Margherita bici" loading="lazy">
-                <div class="cad" style="margin-top:10px">Isola car-free nel Danubio. Noleggiate le bici all'ingresso e girate i 5 km — fontana musicale, rose garden, rovine medievali. Aprile: fiori in piena fioritura. <strong>Portate il costume già addosso!</strong></div>
-                <div class="tags"><span class="tag tg">Romantico</span><span class="tag tg">~8-12€/h bici</span><span class="tag tg">Ingresso gratis</span></div>
-              </div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Isola Margherita in bicicletta</div><div class="cat">12:30 – 14:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Isola car-free nel Danubio. Noleggiate le bici all'ingresso e girate i 5 km — fontana musicale, rose garden, rovine medievali. Aprile: fiori in piena fioritura. <strong>Portate il costume già addosso!</strong></div><div class="tags"><span class="tag tg">Romantico</span><span class="tag tg">~8-12€/h bici</span><span class="tag tg">Ingresso gratis</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Margaret+Island+Budapest" target="_blank">Maps Isola <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Bringohintopark+Margaret+Island" target="_blank">Noleggio bici <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div>
-            <div class="card">
-              <div class="cah"><div class="cal"><div class="can">Pranzo sull'isola</div><div class="cat">14:30 – 15:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Bar e ristoranti sull'isola. Oppure Bolt per rientrare in centro (~7€).</div><div class="tags"><span class="tag tb">Sull'isola</span></div></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Pranzo sull'isola</div><div class="cat">14:30 – 15:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Bar e ristoranti sull'isola. Oppure Bolt per rientrare in centro (~7€).</div><div class="links"><a class="lnk lnk-dim" href="https://bolt.eu/it/" target="_blank">Apri Bolt <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div>
-            <div class="card ac-s">
-              <div class="cah"><div class="cal"><div class="can">Bastione dei Pescatori</div><div class="cat">16:00 – 17:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi">
-                <img class="card-img" src="https://images.unsplash.com/photo-1549535861-d4b6e7e2f55e?w=600&q=70" alt="Bastione dei Pescatori" loading="lazy">
-                <div class="cad" style="margin-top:10px">La vista più bella di Budapest — torri fiabesche, panorama sul Danubio e il Parlamento. Luce dorata nel tardo pomeriggio. Funicolare Sikló (~3€) o salita a piedi.</div>
-                <div class="tags"><span class="tag tg">★ Vista iconica</span><span class="tag tg">Gratis</span></div>
-              </div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Bastione dei Pescatori</div><div class="cat">16:00 – 17:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">La vista più bella di Budapest — torri fiabesche, panorama sul Danubio e il Parlamento. Luce dorata nel tardo pomeriggio. Funicolare Sikló (~3€) o salita a piedi.</div><div class="tags"><span class="tag tg">★ Vista</span><span class="tag tg">Gratis</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Fisherman%27s+Bastion+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://budavar.hu/halaszbastya/" target="_blank">Info & biglietti <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div>
-            <div class="card">
-              <div class="cah"><div class="cal"><div class="can">Castello di Buda & tramonto</div><div class="cat">17:30 – 19:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">A pochi passi dal Bastione. Cortili con vista Danubio — uno dei tramonti più romantici d'Europa.</div><div class="tags"><span class="tag tg">UNESCO</span><span class="tag tg">Tramonto</span></div></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Castello di Buda & tramonto</div><div class="cat">17:30 – 19:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">A pochi passi dal Bastione. Cortili con vista Danubio — il tramonto da lassù è romanticissimo.</div><div class="tags"><span class="tag tg">UNESCO</span><span class="tag tg">Tramonto</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Buda+Castle+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div>
-            <div class="card ac-f">
-              <div class="cah"><div class="cal"><div class="can">Cena — Spoon The Boat</div><div class="cat">20:00 – 22:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Ristorante su battello ormeggiato sul Danubio, vista diretta sul Castello illuminato. Musica dal vivo. Prenotate in anticipo.</div><div class="tags"><span class="tag tb">Romantico</span><span class="tag tb">Sul Danubio</span><span class="tag tr">€€€</span></div><a class="blink bl-green" href="https://spoontheboat.hu" target="_blank">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Cena — Spoon The Boat</div><div class="cat">20:00 – 22:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Ristorante su battello ormeggiato sul Danubio, vista diretta Castello illuminato. Musica dal vivo. Prenotate in anticipo.</div><div class="tags"><span class="tag tb">Romantico</span><span class="tag tb">Sul Danubio</span><span class="tag tr">€€€</span></div><div class="links"><a class="lnk lnk-g" href="https://spoontheboat.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Spoon+The+Boat+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
         </div>
-        <div class="tip-box">🚌 <strong>Isola dalle terme:</strong> bus 105 o tram 1, ~20 min. Bolt ~7€. L'isola è solo bici e pedoni.</div>
+        <div class="tip-box">🚌 <strong>Dall'isola al centro:</strong> tram 4/6 o Bolt ~7€. <strong>Isola dalle terme:</strong> bus 26 o taxi, ~20 min.</div>
       </div>
 
-      <!-- DOMENICA -->
+      <!-- ── DOMENICA ── -->
       <div id="d2" class="day-section">
         <div class="day-hero">
-          <img src="https://images.unsplash.com/photo-1584811644165-33078f50eb15?w=800&q=75" alt="Budapest Parlamento vista" loading="lazy">
-          <div class="day-hero-grad"></div>
-          <div class="day-hero-label">
-            <div class="dht">Rudas & <em>Andrássy</em></div>
-            <div class="dhs">Terme ottomane · Parlamento · New York Café</div>
-          </div>
+          <!-- Hero: Budapest panoramic view from Buda castle -->
+          <svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sk2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a0820"/><stop offset="35%" stop-color="#2a1030"/><stop offset="60%" stop-color="#3a1520"/><stop offset="100%" stop-color="#0c0810"/></linearGradient>
+    <linearGradient id="sun2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff6020"/><stop offset="100%" stop-color="#cc3010"/></linearGradient>
+    <linearGradient id="dan2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a1028"/><stop offset="100%" stop-color="#080410"/></linearGradient>
+    <filter id="g3"><feGaussianBlur stdDeviation="5"/></filter>
+    <filter id="g4"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+  <rect width="400" height="210" fill="url(#sk2)"/>
+  <!-- sunset glow -->
+  <ellipse cx="320" cy="100" rx="120" ry="80" fill="#ff6020" opacity=".08" filter="url(#g4)"/>
+  <ellipse cx="320" cy="105" rx="60" ry="40" fill="#ff8040" opacity=".12" filter="url(#g3)"/>
+  <!-- setting sun -->
+  <circle cx="330" cy="92" r="16" fill="url(#sun2)" opacity=".4"/><circle cx="330" cy="92" r="24" fill="#ff6020" opacity=".06" filter="url(#g3)"/>
+  <!-- stars emerging -->
+  <g fill="#fff" opacity=".4"><circle cx="30" cy="12" r=".8"/><circle cx="90" cy="20" r=".6"/><circle cx="50" cy="35" r=".5"/><circle cx="140" cy="8" r=".7"><animate attributeName="opacity" values=".2;.6;.2" dur="3s" repeatCount="indefinite"/></circle></g>
+  <!-- Andrássy boulevard silhouette -->
+  <g fill="#0c0610" opacity=".92"><rect x="0" y="95" width="32" height="55"/><rect x="34" y="88" width="28" height="62"/><rect x="64" y="92" width="22" height="58"/><rect x="88" y="85" width="30" height="65"/><rect x="120" y="90" width="18" height="60"/></g>
+  <!-- Ottoman dome (Rudas) centerpiece -->
+  <ellipse cx="200" cy="94" rx="38" ry="26" fill="#0e0818" stroke="#cca0ff" stroke-width=".6" opacity=".9"/>
+  <ellipse cx="200" cy="80" rx="22" ry="16" fill="#0a0614" stroke="#cca0ff" stroke-width=".5"/>
+  <circle cx="200" cy="66" r="3" fill="#cca0ff" opacity=".6"/><circle cx="200" cy="66" r="8" fill="#cca0ff" opacity=".06" filter="url(#g3)"/>
+  <rect x="170" y="96" width="60" height="30" fill="#0c0818" stroke="#cca0ff" stroke-width=".4"/>
+  <!-- star pattern on dome (Ottoman style) -->
+  <g fill="#cca0ff" opacity=".2"><circle cx="190" cy="82" r="1.2"/><circle cx="200" cy="76" r="1.5"/><circle cx="210" cy="82" r="1.2"/><circle cx="195" cy="88" r="1"/><circle cx="205" cy="88" r="1"/></g>
+  <!-- right side Pest buildings -->
+  <g fill="#0c0610" opacity=".9"><rect x="280" y="90" width="20" height="60"/><rect x="302" y="85" width="24" height="65"/><rect x="328" y="92" width="18" height="58"/><rect x="348" y="80" width="26" height="70"/><rect x="376" y="88" width="24" height="62"/></g>
+  <!-- lit windows warm -->
+  <g fill="#ffb060" opacity=".5"><rect x="37" y="98" width="3" height="5" rx="1.5"/><rect x="47" y="98" width="3" height="5" rx="1.5"/><rect x="92" y="96" width="3" height="5" rx="1.5"/><rect x="104" y="96" width="3" height="5" rx="1.5"/><rect x="306" y="95" width="3" height="5" rx="1.5"/><rect x="316" y="95" width="3" height="5" rx="1.5"/><rect x="352" y="90" width="3" height="5" rx="1.5"/><rect x="362" y="90" width="3" height="5" rx="1.5"/></g>
+  <!-- Danube with sunset reflection -->
+  <rect x="0" y="130" width="400" height="80" fill="url(#dan2)"/>
+  <ellipse cx="320" cy="145" rx="80" ry="20" fill="#ff6020" opacity=".08" filter="url(#g3)"/>
+  <!-- ripples purple tint -->
+  <g stroke="#6a40a0" fill="none" opacity=".2" stroke-width=".6"><path d="M0,142 Q200,138 400,142"><animate attributeName="d" values="M0,142 Q200,138 400,142;M0,142 Q200,146 400,142;M0,142 Q200,138 400,142" dur="5s" repeatCount="indefinite"/></path><path d="M0,158 Q200,154 400,158"/><path d="M0,172 Q200,168 400,172"/></g>
+</svg>
+          <div class="hero-grad"></div>
+          <div class="day-label"><div class="dht">Rudas & <em>Andrássy</em></div><div class="dhs">Terme ottomane · Parlamento · New York Café</div></div>
         </div>
-        <div class="lgr">
-          <div class="lg lg-s"><div class="lgdot"></div>Attrazioni</div>
-          <div class="lg lg-f"><div class="lgdot"></div>Cibo & drink</div>
-          <div class="lg lg-a"><div class="lgdot"></div>Terme</div>
-          <div class="lg lg-n"><div class="lgdot"></div>Serata</div>
-        </div>
+        <div class="lgr"><div class="lg lg-s"><div class="lgdot"></div>Attrazioni</div><div class="lg lg-f"><div class="lgdot"></div>Cibo</div><div class="lg lg-a"><div class="lgdot"></div>Terme</div><div class="lg lg-n"><div class="lgdot"></div>Serata</div></div>
         <div class="tl">
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Colazione in hotel</div><div class="cat">08:00 – 08:45</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Inclusa. Mangiate bene prima delle terme.</div><div class="tags"><span class="tag tr">Inclusa</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Colazione in hotel</div><div class="cat">08:00 – 08:45</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Inclusa. Mangiate bene prima delle terme.</div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-a"></div><div class="seg seg-a"></div></div>
-            <div class="card ac-a">
-              <div class="cah"><div class="cal"><div class="can">Terme Rudas — mattina</div><div class="cat">09:00 – 11:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Ottomane del 1550. Vasca ottagonale con cupola a stella. Piscina panoramica sul <strong>tetto</strong> con vista Danubio. <strong>Ticket "all-in"</strong> per accedere al tetto.</div><div class="tags"><span class="tag ta">Ottomane 1550</span><span class="tag ta">Tetto panoramico</span><span class="tag tr">~30€</span></div><a class="blink bl-orange" href="https://www.rudasfurdo.hu" target="_blank">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-a"></div><div class="seg seg-a"></div></div><div class="card ac-a"><div class="cah"><div class="cal"><div class="can">Terme Rudas — mattina</div><div class="cat">09:00 – 11:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Ottomane del 1550 — vasca ottagonale con cupola a stella. Piscina panoramica sul <strong>tetto</strong> con vista Danubio. Prendete il ticket <strong>"all-in"</strong> per accedere al tetto.</div><div class="tags"><span class="tag ta">Ottomane 1550</span><span class="tag ta">Tetto panoramico</span><span class="tag tr">~30€</span></div><div class="links"><a class="lnk lnk-o" href="https://www.rudasfurdo.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Rudas+Baths+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div>
-            <div class="card ac-s">
-              <div class="cah"><div class="cal"><div class="can">Tour Parlamento ungherese</div><div class="cat">12:00 – 13:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">Terzo più grande al mondo — 691 stanze. Tour include la <strong>Corona di Santo Stefano</strong> da 1000 anni. <strong>Prenotate settimane prima.</strong> Portate documento.</div><div class="tags"><span class="tag tg">★ Must see</span><span class="tag tg">~18€</span><span class="tag tr">Documento</span></div><a class="blink bl-green" href="https://www.parlament.hu/en/web/house-of-the-national-assembly/guided-tours" target="_blank">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Tour Parlamento ungherese</div><div class="cat">12:00 – 13:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Terzo più grande al mondo — 691 stanze. Tour include la <strong>Corona di Santo Stefano</strong> da 1000 anni. <strong>Prenotate settimane prima.</strong> Portate documento.</div><div class="tags"><span class="tag tg">★ Must see</span><span class="tag tg">~18€</span><span class="tag tr">Documento obbligatorio</span></div><div class="links"><a class="lnk lnk-g" href="https://www.parlament.hu/en/web/house-of-the-national-assembly/guided-tours" target="_blank">Prenota tour <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Hungarian+Parliament+Building" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Pranzo vicino al Parlamento</div><div class="cat">13:30 – 14:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Hungarikum Bisztrò se non ci siete stati venerdì, oppure i bistrot del lungofiume.</div><div class="tags"><span class="tag tb">€ – €€€</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Pranzo vicino al Parlamento</div><div class="cat">13:30 – 14:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Zona ricca di opzioni. Hungarikum se non ci siete stati venerdì, oppure i bistrot del lungofiume.</div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=restaurants+near+Hungarian+Parliament+Budapest" target="_blank">Ristoranti vicini <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Viale Andrássy & Piazza degli Eroi</div><div class="cat">15:00 – 16:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">La "Champs-Élysées di Budapest" (UNESCO) — 2,3 km di palazzi eclettici. Piazza degli Eroi con il Monumento del Millennio. Poi il Castello Vajdahunyad nel City Park.</div><div class="tags"><span class="tag tg">UNESCO</span><span class="tag tg">Gratis</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Viale Andrássy & Piazza degli Eroi</div><div class="cat">15:00 – 16:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">La "Champs-Élysées di Budapest" (UNESCO). Piazza degli Eroi col Monumento del Millennio. Poi il Castello Vajdahunyad nel City Park.</div><div class="tags"><span class="tag tg">UNESCO</span><span class="tag tg">Gratis</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Heroes+Square+Budapest" target="_blank">Maps Piazza Eroi <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Vajdahunyad+Castle+Budapest" target="_blank">Castello Vajdahunyad <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)">
-            <div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div>
-            <div class="card ac-f">
-              <div class="cah"><div class="cal"><div class="can">Caffè — New York Café</div><div class="cat">17:00 – 18:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div>
-              <div class="cab"><div class="cabi"><div class="cad">"Il caffè più bello del mondo" — interni barocchi dorati, affreschi, violinisti dal 1894. Solo un caffè e una pasta: l'esperienza conta. Prezzi alti, ingresso libero.</div><div class="tags"><span class="tag tgold">★ Iconico</span><span class="tag tr">Erzsébet krt. 9-11</span></div><a class="blink bl-blue" href="https://www.newyorkcafe.hu" target="_blank">Sito ufficiale <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div>
-            </div>
-          </div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Caffè — New York Café</div><div class="cat">17:00 – 18:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">"Il caffè più bello del mondo" — interni barocchi dorati, affreschi, violinisti dal 1894. Solo un caffè e una pasta: l'esperienza conta. Ingresso libero.</div><div class="tags"><span class="tag tgold">★ Iconico</span><span class="tag tr">Erzsébet krt. 9-11</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=New+York+Cafe+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://www.newyorkcafe.hu" target="_blank">Sito ufficiale <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Cena nel quartiere ebraico</div><div class="cat">19:30 – 21:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Via Kazinczy — il quartiere più vivo. Ristoranti, ruin bar, street food. Perfetto per l'ultima serata vera.</div><div class="tags"><span class="tag tb">Quartiere ebraico</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Cena nel quartiere ebraico</div><div class="cat">19:30 – 21:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Via Kazinczy — il quartiere più vivo. Ristoranti di ogni tipo, ruin bar, street food.</div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Kazinczy+utca+Budapest" target="_blank">Maps quartiere <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Mazel+Tov+Budapest" target="_blank">Mazel Tov (consigliato) <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-n"></div><div class="seg seg-n"></div></div><div class="card ac-n"><div class="cah"><div class="cal"><div class="can">Ruin bar & passeggiata serale</div><div class="cat">21:30 →</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Instant-Fogas, Mazel Tov (cortile bellissimo) o una passeggiata nei vicoli illuminati.</div><div class="tags"><span class="tag tp">Facoltativo</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-n"></div><div class="seg seg-n"></div></div><div class="card ac-n"><div class="cah"><div class="cal"><div class="can">Ruin bar & serata libera</div><div class="cat">21:30 →</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Instant-Fogas, Mazel Tov, o una passeggiata nei vicoli illuminati. Domani avete tutta la giornata.</div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Instant+Fogas+Budapest" target="_blank">Instant-Fogas <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
         </div>
-        <div class="tip-box">🛁 <strong>Terme Rudas domenica:</strong> apre alle 6:00. Fascia 9-11:30 = meno folla. Night Bath venerdì e sabato dalle 22:00.</div>
+        <div class="tip-box">🛁 <strong>Terme Rudas domenica:</strong> apre alle 6:00. Fascia 9-11:30 = meno folla. Night Bath ven/sab dalle 22:00.</div>
       </div>
 
-      <!-- LUNEDÌ -->
+      <!-- ── LUNEDÌ ── -->
       <div id="d3" class="day-section">
         <div class="day-hero">
-          <img src="https://images.unsplash.com/photo-1549439602-43ebca2327af?w=800&q=75" alt="Budapest Gellert Hill" loading="lazy">
-          <div class="day-hero-grad"></div>
-          <div class="day-hero-label">
-            <div class="dht">Gellért & <em>partenza</em></div>
-            <div class="dhs">Giornata piena · Volo ore 22:00</div>
-          </div>
+          <!-- Hero: Gellert Hill green panorama -->
+          <svg viewBox="0 0 400 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sk3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a1810"/><stop offset="40%" stop-color="#0c2418"/><stop offset="100%" stop-color="#081810"/></linearGradient>
+    <linearGradient id="sunrise" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#ff8030" stop-opacity=".2"/><stop offset="40%" stop-color="#ffb050" stop-opacity=".08"/><stop offset="100%" stop-color="#ffb050" stop-opacity="0"/></linearGradient>
+    <linearGradient id="hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a4a22"/><stop offset="100%" stop-color="#0c2a12"/></linearGradient>
+    <linearGradient id="rv3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#102820"/><stop offset="100%" stop-color="#061410"/></linearGradient>
+    <filter id="b3g"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="b6g"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+  <rect width="400" height="210" fill="url(#sk3)"/>
+  <!-- sunrise glow on right -->
+  <ellipse cx="350" cy="110" rx="120" ry="90" fill="#ff8030" opacity=".07" filter="url(#b6g)"/>
+  <rect x="0" y="80" width="400" height="130" fill="url(#sunrise)"/>
+  <!-- Gellért Hill -->
+  <ellipse cx="120" cy="175" rx="160" ry="110" fill="url(#hill)"/>
+  <!-- trees layers -->
+  <g fill="#1a5a28" opacity=".8"><circle cx="20" cy="140" r="22"/><circle cx="50" cy="128" r="28"/><circle cx="85" cy="115" r="35"/><circle cx="125" cy="110" r="30"/><circle cx="158" cy="118" r="22"/><circle cx="180" cy="128" r="16"/></g>
+  <g fill="#226830" opacity=".6"><circle cx="30" cy="148" r="16"/><circle cx="65" cy="135" r="22"/><circle cx="105" cy="122" r="26"/><circle cx="140" cy="118" r="20"/><circle cx="168" cy="126" r="14"/></g>
+  <g fill="#2a7a38" opacity=".4"><circle cx="45" cy="142" r="12"/><circle cx="78" cy="130" r="16"/><circle cx="112" cy="120" r="18"/><circle cx="148" cy="122" r="12"/></g>
+  <!-- Liberty Statue with glow -->
+  <line x1="90" y1="108" x2="90" y2="70" stroke="#4af0d8" stroke-width="2" opacity=".7"/>
+  <circle cx="90" cy="68" r="4" fill="#4af0d8" opacity=".8"/>
+  <circle cx="90" cy="68" r="12" fill="#4af0d8" opacity=".1" filter="url(#b3g)"><animate attributeName="r" values="12;18;12" dur="4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".1;.18;.1" dur="4s" repeatCount="indefinite"/></circle>
+  <path d="M84,98 L90,70 L96,98 Z" fill="#30a068" opacity=".4"/>
+  <!-- animated floating leaves -->
+  <g fill="#4af0d8" opacity=".25"><circle cx="60" cy="100" r="2"><animate attributeName="cy" values="100;85;100" dur="6s" repeatCount="indefinite"/><animate attributeName="cx" values="60;68;60" dur="6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".15;.35;.15" dur="6s" repeatCount="indefinite"/></circle><circle cx="140" cy="95" r="1.5"><animate attributeName="cy" values="95;82;95" dur="5s" repeatCount="indefinite"/><animate attributeName="cx" values="140;148;140" dur="5s" repeatCount="indefinite"/></circle><circle cx="110" cy="105" r="1.8"><animate attributeName="cy" values="105;90;105" dur="7s" repeatCount="indefinite"/><animate attributeName="cx" values="110;116;110" dur="7s" repeatCount="indefinite"/></circle></g>
+  <!-- Liberty Bridge silhouette -->
+  <g stroke="#daa040" stroke-width=".8" fill="none" opacity=".4"><line x1="180" y1="138" x2="180" y2="152"/><line x1="230" y1="138" x2="230" y2="152"/><path d="M155,145 Q180,130 205,140 Q230,130 255,145"/><line x1="155" y1="145" x2="255" y2="145"/></g>
+  <!-- Pest skyline silhouette -->
+  <g fill="#060e08" opacity=".9"><rect x="270" y="100" width="16" height="52"/><rect x="290" y="92" width="20" height="60"/><rect x="314" y="98" width="14" height="54"/><rect x="332" y="86" width="22" height="66"/><rect x="358" y="94" width="18" height="58"/><rect x="380" y="88" width="20" height="64"/></g>
+  <g fill="#daa040" opacity=".3"><rect x="295" y="102" width="3" height="5" rx="1.5"/><rect x="305" y="102" width="3" height="5" rx="1.5"/><rect x="336" y="96" width="3" height="5" rx="1.5"/><rect x="346" y="96" width="3" height="5" rx="1.5"/></g>
+  <!-- Danube -->
+  <rect x="155" y="148" width="245" height="62" fill="url(#rv3)"/>
+  <g stroke="#2a6a40" fill="none" opacity=".25" stroke-width=".5"><path d="M155,158 Q280,154 400,158"/><path d="M155,170 Q280,166 400,170"/></g>
+</svg>
+          <div class="hero-grad"></div>
+          <div class="day-label"><div class="dht">Gellért & <em>partenza</em></div><div class="dhs">Giornata piena · Volo ore 22:00</div></div>
         </div>
-        <div class="lgr">
-          <div class="lg lg-s"><div class="lgdot"></div>Attrazioni</div>
-          <div class="lg lg-f"><div class="lgdot"></div>Cibo & drink</div>
-          <div class="lg lg-h"><div class="lgdot"></div>Hotel</div>
-        </div>
+        <div class="lgr"><div class="lg lg-s"><div class="lgdot"></div>Attrazioni</div><div class="lg lg-f"><div class="lgdot"></div>Cibo</div><div class="lg lg-h"><div class="lgdot"></div>Hotel</div></div>
         <div class="tl">
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Colazione in hotel</div><div class="cat">08:30 – 09:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Inclusa. Ultima colazione con calma — avete tutta la giornata davanti.</div><div class="tags"><span class="tag tr">Inclusa</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Colazione in hotel</div><div class="cat">08:30 – 09:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Inclusa. Ultima colazione con calma — avete tutta la giornata davanti.</div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Collina Gellért & Monumento della Libertà</div><div class="cat">09:30 – 11:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">235 m sul Danubio. A piedi ~25 min o Bolt ~5€. Panorama a 360° su tutta Budapest — il più completo della città.</div><div class="tags"><span class="tag tg">Panorama 360°</span><span class="tag tg">Gratis</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card ac-s"><div class="cah"><div class="cal"><div class="can">Collina Gellért & Monumento Libertà</div><div class="cat">09:30 – 11:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">235 m sul Danubio. A piedi ~25 min dal Ponte Elisabetta, o Bolt ~5€. Panorama a 360° su tutta Budapest — il più completo della città.</div><div class="tags"><span class="tag tg">Panorama 360°</span><span class="tag tg">Gratis</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Gellert+Hill+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://bolt.eu/it/" target="_blank">Prenota Bolt ~5€ <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Ponte della Libertà & lungofiume</div><div class="cat">11:00 – 12:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Scendete dalla collina e attraversate il ponte verde Art Nouveau. Passeggiata finale sul lungofiume con vista Castello.</div><div class="tags"><span class="tag tg">Art Nouveau</span><span class="tag tg">Gratis</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Ponte della Libertà & lungofiume</div><div class="cat">11:00 – 12:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Scendete dalla collina e attraversate il ponte verde Art Nouveau. Passeggiata finale sul lungofiume.</div><div class="tags"><span class="tag tg">Art Nouveau</span><span class="tag tg">Gratis</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Liberty+Bridge+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Pranzo — Grande Mercato Coperto</div><div class="cat">12:00 – 13:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">1897 — il mercato più bello di Budapest. Piano superiore: lángos e i <strong>migliori souvenir a prezzi onesti</strong>. Chiuso domenica — perfetto oggi!</div><div class="tags"><span class="tag tb">★ Mercato storico</span><span class="tag tb">Souvenir</span><span class="tag tr">€</span></div><a class="blink bl-blue" href="https://maps.google.com/?q=Nagy+Vasarcsarnok+Budapest" target="_blank">Apri in Maps <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Pranzo — Grande Mercato Coperto</div><div class="cat">12:00 – 13:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Dal 1897. Piano superiore: lángos e i <strong>migliori souvenir a prezzi onesti</strong> — paprika, pálinka, miele, salumi. Chiuso domenica — perfetto oggi!</div><div class="tags"><span class="tag tb">★ Mercato storico</span><span class="tag tb">Souvenir</span><span class="tag tr">€</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Central+Market+Hall+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Check-out & deposito bagagli</div><div class="cat">14:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Check-out. Chiedete di lasciare i bagagli alla reception fino alla sera.</div><div class="tags"><span class="tag tr">Check-out</span><span class="tag tr">Bagagli in hotel</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Check-out & deposito bagagli</div><div class="cat">14:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Check-out. Lasciate i bagagli alla reception fino alla sera — normalissimo in un hotel 4★.</div><div class="tags"><span class="tag tr">Bagagli in hotel</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Alice+Hotel+Budapest" target="_blank">Maps hotel <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Quartiere Palazzo & caffè</div><div class="cat">14:30 – 17:00</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Via Bródy Sándor — caffè indipendenti, librerie, cortili nascosti. Budapest autentica. Oppure Párisi Udvar per un caffè pomeridiano.</div><div class="tags"><span class="tag tg">Autentico</span><span class="tag tg">Rilassato</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-s"></div><div class="seg seg-s"></div></div><div class="card"><div class="cah"><div class="cal"><div class="can">Pomeriggio libero — Párisi Udvar</div><div class="cat">14:30 – 17:00</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Caffè pomeridiano al Párisi Udvar, oppure esplorate il quartiere Bródy — caffè indipendenti, librerie, cortili nascosti.</div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Parisi+Udvar+Budapest" target="_blank">Párisi Udvar <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Brody+Budapest" target="_blank">Quartiere Bródy <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Aperitivo & ultima cena</div><div class="cat">17:30 – 19:30</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Ultima cena a Budapest. Zona Vörösmarty tér o quartiere ebraico. Mangiate con calma — avete tempo.</div><div class="tags"><span class="tag tb">Ultima cena</span><span class="tag tr">€€</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-f"></div><div class="seg seg-f"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Aperitivo & ultima cena</div><div class="cat">17:30 – 19:30</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Ultima cena a Budapest. Zona Vörösmarty tér o quartiere ebraico — scegliete quello che non avete ancora provato.</div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=restaurants+Vorosmarty+ter+Budapest" target="_blank">Zona Vörösmarty <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
-          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Ritiro bagagli & aeroporto</div><div class="cat">19:45 →</div></div><svg class="chv svg-chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad">Recuperate i bagagli. <strong>Bus 100E</strong> da Deák tér: ~45 min, ~2€. Bolt: ~25-35€. Volo 22:00 → partite entro 19:45.</div><div class="tags"><span class="tag tr">Bus 100E · Deák tér</span><span class="tag tr">Bolt ~30€</span><span class="tag tb">Volo 22:00</span></div></div></div></div></div>
+          <div class="ti" onclick="tc(this)"><div class="tll"><div class="dot d-h"></div><div class="seg seg-h"></div></div><div class="card ac-f"><div class="cah"><div class="cal"><div class="can">Ritiro bagagli & aeroporto</div><div class="cat">19:45 →</div></div><svg class="chv" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></div><div class="cab"><div class="cabi"><div class="cad"><strong>Bus 100E</strong> da Deák tér: ~45 min, ~2€. <strong>Bolt</strong>: ~25-35€. Volo 22:00 → partite entro 19:45, check-in chiude ~21:00.</div><div class="tags"><span class="tag tr">Bus 100E · Deák tér</span><span class="tag tr">Bolt ~30€</span><span class="tag tb">Volo 22:00</span></div><div class="links"><a class="lnk lnk-b" href="https://maps.google.com/?q=Deak+Ferenc+ter+Budapest" target="_blank">Deák tér (bus 100E) <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://bolt.eu/it/" target="_blank">Prenota Bolt <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Budapest+Ferenc+Liszt+Airport" target="_blank">Aeroporto <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div></div>
 
         </div>
-        <div class="tip-box">✈️ <strong>Timing:</strong> volo 22:00 → partite alle 19:45. Bus 100E ~45 min, check-in chiude 2h prima.</div>
+        <div class="tip-box">✈️ <strong>Timing:</strong> volo 22:00 → partite alle 19:45. Bus 100E ~45 min, check-in chiude 2h prima. Bagagli in hotel tutto il giorno.</div>
       </div>
     </div><!-- /tab-itin -->
 
-    <!-- ──── ESSENTIALS ──── -->
+    <!-- ════ ESSENTIALS ════ -->
     <div id="tab-ess" style="display:none">
       <div class="ew">
         <div class="est">Da prenotare prima</div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏛️ Parlamento — tour guidato</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Settimane prima — si esaurisce subito. ~18€ a testa. Portate documento.<br><br><a class="blink bl-green" href="https://www.parlament.hu/en/web/house-of-the-national-assembly/guided-tours" target="_blank" style="display:inline-flex">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛁 Terme Széchenyi</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">~35€. Sabato 9:00. Cuffia obbligatoria, ciabatte, asciugamano.<br><br><a class="blink bl-orange" href="https://www.szechenyifurdo.hu" target="_blank" style="display:inline-flex">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛁 Terme Rudas</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">~30€. Domenica 9:00. Ticket "all-in" per il tetto panoramico.<br><br><a class="blink bl-orange" href="https://www.rudasfurdo.hu" target="_blank" style="display:inline-flex">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍽️ Spoon The Boat</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Sabato sera ore 20:00. Chiedete tavolo con vista Castello di Buda.<br><br><a class="blink bl-green" href="https://spoontheboat.hu" target="_blank" style="display:inline-flex">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏛️ Parlamento — tour guidato</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Settimane prima — si esaurisce subito. ~18€. Portate documento d'identità. Domenica dopo le terme Rudas.<br><br><div class="links" style="margin-top:8px"><a class="lnk lnk-g" href="https://www.parlament.hu/en/web/house-of-the-national-assembly/guided-tours" target="_blank">Prenota tour <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛁 Terme Széchenyi</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">~35€. Sabato 9:00. Cuffia obbligatoria nelle piscine coperte, ciabatte, asciugamano.<br><br><div class="links" style="margin-top:8px"><a class="lnk lnk-o" href="https://www.szechenyifurdo.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Szechenyi+Thermal+Bath+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛁 Terme Rudas</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">~30€. Domenica 9:00. Ticket "all-in" per il tetto panoramico.<br><br><div class="links" style="margin-top:8px"><a class="lnk lnk-o" href="https://www.rudasfurdo.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Rudas+Baths+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍽️ Spoon The Boat</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Ristorante sul Danubio. Sabato sera ore 20:00. Chiedete tavolo con vista Castello di Buda.<br><br><div class="links" style="margin-top:8px"><a class="lnk lnk-g" href="https://spoontheboat.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Spoon+The+Boat+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
         <div class="edv"></div>
         <div class="est">Trasporti</div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">✈️ Aeroporto ↔ centro</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Bus 100E</strong> da/per Deák Ferenc tér: diretto ~45 min, ~2€. <strong>Bolt</strong> ~25-35€. Evitate taxi bianchi fuori aeroporto.</div></div></div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🚕 Bolt — l'Uber locale</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Prezzi fissi. Centro-centro ~5-8€. Collina Gellért ~5€. Isola dalle terme ~7-10€.<br><br><a class="blink bl-blue" href="https://bolt.eu" target="_blank" style="display:inline-flex">Scarica Bolt <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🚌 Mezzi pubblici</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Biglietto ~1.5€ — <strong>validatelo sempre</strong> (multa ~16€). Tram 2 sul lungofiume bellissimo.</div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">✈️ Aeroporto ↔ centro</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Bus 100E</strong> da/per Deák Ferenc tér: diretto ~45 min, ~2€. <strong>Bolt</strong>: ~25-35€. Evitate taxi bianchi fuori aeroporto.<br><br><div class="links" style="margin-top:8px"><a class="lnk lnk-b" href="https://maps.google.com/?q=Deak+Ferenc+ter+Budapest" target="_blank">Fermata Bus 100E <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Budapest+Liszt+Ferenc+International+Airport" target="_blank">Aeroporto <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🚕 Bolt — l'Uber locale</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Prezzi fissi, nessuna sorpresa. Centro-centro ~5-8€. Isola Margherita ~8€. Gellért Hill ~5€. Aeroporto ~30€.<br><br><div class="links" style="margin-top:8px"><a class="lnk lnk-dim" href="https://bolt.eu/it/" target="_blank">Scarica Bolt <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🚌 Mezzi pubblici</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Biglietto ~1.5€ — <strong>validatelo sempre</strong> (multa ~16€). Tram 2 sul lungofiume bellissimo. App BudapestGO per biglietti digitali.<br><br><div class="links" style="margin-top:8px"><a class="lnk lnk-dim" href="https://bkk.hu/en/" target="_blank">BudapestGO / BKK <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
         <div class="edv"></div>
         <div class="est">Pratiche</div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">💶 Valuta & mance</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Fiorino ungherese (HUF). <strong>1€ ≈ 400 HUF.</strong> Carta accettata ovunque. Mancia 10-15% — ditela al cameriere.</div></div></div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">📱 App utili</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Bolt</strong> — taxi essenziale · <strong>BudapestGO</strong> — mezzi · <strong>Google Maps</strong> · <strong>Google Translate</strong> (fotocamera per menu ungheresi) · <strong>Revolut/Wise</strong></div></div></div>
-        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">⚠️ Cose da evitare</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">• Cambiavalute in strada<br>• Taxi non-Bolt fuori aeroporto<br>• Ristoranti con foto plastificate vicino al Bastione<br>• Souvenir vicino al Bastione — stesso prodotto, prezzi doppi<br>• Non validare il biglietto — multa ~16€</div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">💶 Valuta & mance</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Fiorino ungherese (HUF). <strong>1€ ≈ 400 HUF.</strong> Carta accettata ovunque. Mancia 10-15% nei ristoranti — ditela al cameriere quando pagate, non lasciarla sul tavolo.</div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">📱 App da scaricare</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Bolt</strong> — taxi (essenziale) · <strong>BudapestGO</strong> — mezzi pubblici · <strong>Google Translate</strong> — fotocamera per menu ungheresi · <strong>Revolut/Wise</strong> — pagamenti senza commissioni cambio<br><br><div class="links" style="margin-top:8px"><a class="lnk lnk-dim" href="https://bolt.eu/it/" target="_blank">Bolt <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-dim" href="https://bkk.hu/en/" target="_blank">BudapestGO <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+        <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">⚠️ Cose da evitare</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">• Cambiavalute in strada — tassi pessimi<br>• Taxi bianchi fuori aeroporto — usate solo Bolt<br>• Ristoranti con foto plastificate vicino al Bastione<br>• Souvenir vicino al Bastione — stesso prodotto, prezzi doppi<br>• Non validare il biglietto sui mezzi — multa ~16€</div></div></div>
       </div>
     </div>
 
     <div class="bnav-spacer"></div>
   </div><!-- /scroll-area -->
 
-  <!-- Fixed bottom nav -->
   <div class="bnav" id="bnav">
     <button class="nb on" id="np" onclick="showTab('itin')">
       <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -785,20 +617,20 @@ body { background: var(--ink); color: var(--cream); font-family: 'Outfit', sans-
       Essenziali
     </button>
     <button class="nb" id="ng" onclick="showTab('guide')">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      <svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
       Guida
     </button>
   </div>
 </div><!-- /app -->
 
-<!-- ════════════════════ GUIDE ════════════════════ -->
+<!-- ════ GUIDE ════ -->
 <div id="guide-out">
   <div class="hdr" id="ghdr">
-    <div class="hdr-left">
+    <div>
       <div class="h-title">Guida & <em>Tips</em></div>
       <div class="h-sub">Budapest — tutto quello che serve sapere</div>
     </div>
-    <div class="h-badge">🧭</div>
+    <div class="h-icon"><svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg></div>
   </div>
   <div class="gst">
     <button class="gsb on" onclick="showGS('luoghi',this)">Luoghi</button>
@@ -809,141 +641,107 @@ body { background: var(--ink); color: var(--cream); font-family: 'Outfit', sans-
   <div class="gs-scroll">
     <div id="gs-luoghi" class="gs on">
       <div class="est" style="margin-top:4px">Attrazioni in dettaglio</div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏰 Bastione dei Pescatori</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Costruito 1895-1902. Le 7 torri = 7 tribù magiari fondatrici. Arrivate prima delle 9:00. Piano base gratuito, superiore ~5€.<br><br><a class="blink bl-green" href="https://budavar.hu/halaszbastya/" target="_blank" style="display:inline-flex">Sito ufficiale <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏛️ Parlamento Ungherese</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Terzo più grande al mondo — 691 stanze, 1885-1904. Tour include la Corona di Santo Stefano da 1000 anni.<br><br><a class="blink bl-green" href="https://www.parlament.hu/en/web/house-of-the-national-assembly/guided-tours" target="_blank" style="display:inline-flex">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛁 Terme Széchenyi</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Le più grandi d'Europa dal 1913. Acqua 74°C da 1000m. Piscine esterne 27°, 36°, 38°. Cuffia obbligatoria.<br><br><a class="blink bl-orange" href="https://www.szechenyifurdo.hu" target="_blank" style="display:inline-flex">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛁 Terme Rudas</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Ottomane del 1550. Vasca ottagonale con cupola a stella. Piscina sul tetto. Night Bath venerdì e sabato 22-4.<br><br><a class="blink bl-orange" href="https://www.rudasfurdo.hu" target="_blank" style="display:inline-flex">Prenota qui <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🌿 Isola Margherita</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">2,5 km car-free dal 1973. Rovine medievali, rose garden, fontana musicale ogni ora. Giro in bici ~5 km in 30-40 min. Aprile = fiori in piena fioritura.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🎭 Szimpla Kert</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Il primo ruin bar del mondo, 2002. 20+ stanze, arte ovunque. Esploratelo tutto prima di sedervi.<br><br><a class="blink bl-blue" href="https://szimpla.hu" target="_blank" style="display:inline-flex">Sito ufficiale <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏗️ Párisi Udvar</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Galleria Art Nouveau 1909, oggi Hyatt. Abbandonato decenni, restaurato 2019. Entrate anche solo per vedere la cupola.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">⛰️ Collina Gellért</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">235 m sul Danubio. A piedi ~25 min o Bolt ~5€. Vista 360° — la panoramica più completa di Budapest.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛍️ Grande Mercato Coperto</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Dal 1897. Piano superiore: lángos e souvenir. Paprika qui = 1/3 del prezzo al Bastione. Lun-ven 6-17, sab 6-15. <strong>Chiuso domenica.</strong></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏰 Bastione dei Pescatori</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Costruito 1895-1902. Le 7 torri = 7 tribù magiari fondatrici (895 d.C.). Arrivate prima delle 9:00. Piano base gratuito, superiore ~5€.<div class="links" style="margin-top:8px"><a class="lnk lnk-dim" href="https://budavar.hu/halaszbastya/" target="_blank">Sito ufficiale <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Fisherman%27s+Bastion+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏛️ Parlamento Ungherese</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Terzo più grande al mondo — 691 stanze, 1885-1904. Tour: Corona di Santo Stefano, interni dorati. Prenotate settimane prima.<div class="links" style="margin-top:8px"><a class="lnk lnk-g" href="https://www.parlament.hu/en/web/house-of-the-national-assembly/guided-tours" target="_blank">Prenota tour <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Hungarian+Parliament+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛁 Terme Széchenyi</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Dal 1913. Acqua 74°C da 1000m. 3 piscine esterne (27°,36°,38°), 15 interne. Cuffia obbligatoria nelle piscine coperte.<div class="links" style="margin-top:8px"><a class="lnk lnk-o" href="https://www.szechenyifurdo.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Szechenyi+Bath+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛁 Terme Rudas</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Ottomane del 1550. Vasca con cupola a stella. Piscina tetto con vista Danubio. Night Bath ven/sab 22-4.<div class="links" style="margin-top:8px"><a class="lnk lnk-o" href="https://www.rudasfurdo.hu" target="_blank">Prenota <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Rudas+Baths+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🌿 Isola Margherita</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">2,5 km car-free dal 1973. Rose garden, fontana musicale ogni ora, rovine medievali. Aprile = fiori in piena fioritura.<div class="links" style="margin-top:8px"><a class="lnk lnk-b" href="https://maps.google.com/?q=Margaret+Island+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🎭 Szimpla Kert</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Il primo ruin bar del mondo, 2002. 20+ stanze, arte ovunque. Esplorate tutto prima di sedervi. Dom mattina = mercato biologico.<div class="links" style="margin-top:8px"><a class="lnk lnk-dim" href="https://szimpla.hu" target="_blank">Sito web <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Szimpla+Kert+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏗️ Párisi Udvar</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Galleria Art Nouveau 1909, oggi Hyatt. Cupola di vetro, mosaici. Entrate anche solo per vedere — nessuno vi chiede niente.<div class="links" style="margin-top:8px"><a class="lnk lnk-b" href="https://maps.google.com/?q=Parisi+Udvar+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">⛰️ Collina Gellért</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">235 m sul Danubio. A piedi ~25 min o Bolt ~5€. Vista 360° — la panoramica più completa di Budapest.<div class="links" style="margin-top:8px"><a class="lnk lnk-b" href="https://maps.google.com/?q=Gellert+Hill+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🛍️ Grande Mercato Coperto</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Dal 1897. Lun-ven 6-17, sab 6-15. <strong>Chiuso domenica.</strong> Paprika qui = 1/3 del prezzo vicino al Bastione.<div class="links" style="margin-top:8px"><a class="lnk lnk-b" href="https://maps.google.com/?q=Central+Market+Hall+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
     </div>
     <div id="gs-cibo" class="gs">
       <div class="est" style="margin-top:4px">Cucina & drink</div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍲 Goulash — Gulyás</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Zuppa brodosa di manzo con paprika, cipolle, patate. Non uno stufato. Migliore in centro da Hungarikum Bisztrò.<br><br><a class="blink bl-green" href="https://hungarikumbisztro.hu" target="_blank" style="display:inline-flex">Prenota <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🥞 Lángos</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Frittella lievitata fritta con panna acida e formaggio. Al Grande Mercato Coperto o Isola Margherita. ~2-3€. Solo caldo e appena fritto.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍷 Vini ungheresi</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Tokaji Aszú</strong> — dolce e dorato, preferito dei re d'Europa. <strong>Egri Bikavér</strong> "Sangue di Toro" — rosso corposo. Chiedete il vino della casa ungherese.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🥃 Pálinka</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Grappa di frutta 40-70°. Distillato nazionale tutelato UE. Liscia, temperatura ambiente, come digestivo. Artigianale al mercato 8-15€.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍪 Cookie Beacon</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Coppia spagnola 2021, tutto da zero. Cookies top: <strong>Nutella & Maldon salt</strong>, <strong>Cinnamon roll</strong>, <strong>Pecan caramel</strong>. Dimensioni americane. No prenotazioni. Ven 8:00, wknd 9:00.<br><br><a class="blink bl-blue" href="https://www.cookiebeacon.com" target="_blank" style="display:inline-flex">Sito web <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">☕ Caffè storici</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>New York Café</strong> — barocco dorato dal 1894. <strong>Párisi Udvar</strong> — Art Nouveau. <strong>Gerbeaud</strong> — pasticceria storica. Espresso locale ~0.75-1.25€.<br><br><a class="blink bl-blue" href="https://www.newyorkcafe.hu" target="_blank" style="display:inline-flex">New York Café <svg class="ext-icon" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍲 Goulash — Gulyás</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Zuppa brodosa di manzo con paprika, cipolle, patate — non uno stufato. Il migliore in centro da Hungarikum Bisztrò.<div class="links" style="margin-top:8px"><a class="lnk lnk-g" href="https://hungarikumbisztro.hu" target="_blank">Prenota Hungarikum <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🥞 Lángos</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Frittella lievitata fritta con panna acida e formaggio — lo street food ungherese per eccellenza. Al Grande Mercato o Isola Margherita. ~2-3€. Solo caldo.</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍷 Vini ungheresi</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Tokaji Aszú</strong> — dolce e dorato, preferito dei re d'Europa.<br><strong>Egri Bikavér</strong> "Sangue di Toro" — rosso corposo.<br>Chiedete sempre il vino della casa ungherese — ottimo rapporto qualità/prezzo.</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🥃 Pálinka</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Grappa di frutta (prugna, albicocca, pera) 40-70°. Distillato nazionale tutelato UE. Liscia, temperatura ambiente. Artigianale al mercato 8-15€.</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍪 Cookie Beacon</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Coppia spagnola 2021, tutto da zero. Cookies top: <strong>Nutella & Maldon salt</strong>, <strong>Cinnamon roll</strong>, <strong>Pecan caramel</strong>. Dimensioni americane — dividete una cookie. No prenotazioni.<div class="links" style="margin-top:8px"><a class="lnk lnk-dim" href="https://www.cookiebeacon.com" target="_blank">Sito web <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Cookie+Beacon+Budapest" target="_blank">Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">☕ Caffè storici</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>New York Café</strong> — barocco dorato dal 1894.<br><strong>Párisi Udvar</strong> — Art Nouveau, meno turistico.<br><strong>Gerbeaud</strong> — pasticceria storica in Vörösmarty tér.<div class="links" style="margin-top:8px"><a class="lnk lnk-dim" href="https://www.newyorkcafe.hu" target="_blank">New York Café <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a><a class="lnk lnk-b" href="https://maps.google.com/?q=Gerbeaud+Budapest" target="_blank">Gerbeaud Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
     </div>
     <div id="gs-tips" class="gs">
       <div class="est" style="margin-top:4px">Tips & Tricks</div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🌡️ Aprile a Budapest</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">8-18°C, poca pioggia, folla ridotta. Giubbotto per la sera, scarpe per pavé, impermeabile leggero. Parchi in fioritura. Tramonto ~19:30.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">📸 Foto migliori</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Parlamento di notte:</strong> dal lungofiume Buda.<br><strong>Bastione:</strong> mattina presto o tramonto.<br><strong>Ponte Libertà:</strong> dalla Collina Gellért.<br><strong>Ruin bar:</strong> arrivate presto, prima della folla.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🎟️ Souvenir — dove comprare</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">I prezzi migliori al <strong>Grande Mercato Coperto</strong> (lun-sab). Paprika, pálinka, Tokaj, miele d'acacia, ricami. Vicino al Bastione = prezzi doppi.</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏨 Alice Hotel — tips</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">5 min dal Danubio, 10 min Parlamento, 5 min Párisi Udvar. Chiedete deposito bagagli gratuito lunedì (volo serale). Colazione inclusa — mangiate bene prima delle terme.</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🌡️ Aprile a Budapest</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">8-18°C, poca pioggia, folla ridotta rispetto all'estate. Giubbotto per la sera (scende sotto i 10°C), scarpe comode per il pavé, impermeabile leggero. Parchi in fioritura — l'Isola Margherita ad aprile è bellissima. Tramonto ~19:30-20:00. Le terrazze dei bar iniziano ad aprire.</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">📸 Foto migliori</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Parlamento di notte:</strong> dal lungofiume Buda di fronte — usate un treppiede o appoggiate il telefono.<br><strong>Bastione dei Pescatori:</strong> mattina presto (prima delle 9) o al tramonto — illuminato di notte è romanticissimo.<br><strong>Ponte della Libertà dall'alto:</strong> dalla Collina Gellért con il Danubio sullo sfondo.<br><strong>Ruin bar:</strong> arrivate presto, prima della folla — i dettagli eclettici si fotografano meglio.</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🎟️ Souvenir — dove comprare</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">I prezzi migliori al <strong>Grande Mercato Coperto</strong> (lun-sab). Paprika rossa sfusa, pálinka artigianale, vino Tokaj, miele d'acacia, salamino ungherese Pick, ricami. Vicino al Bastione = prezzi doppi. Evitate le bustine di spezie preconfezionate con bandierine — sono per turisti.<div class="links" style="margin-top:8px"><a class="lnk lnk-b" href="https://maps.google.com/?q=Central+Market+Hall+Budapest" target="_blank">Mercato Coperto Maps <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🚶 Orientamento Buda/Pest</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Pest</strong> = lato pianeggiante e vivace — hotel, mercati, ruin bar, Parlamento, Cookie Beacon. <strong>Buda</strong> = lato collinare e storico — Castello, Bastione, terme Rudas. Il Tram 2 lungo il lungofiume Pest è uno dei percorsi più belli d'Europa e collega tutto il centro.</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">💡 Piccole cose utili</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">• Acqua del rubinetto potabile — portate una borraccia<br>• Bagni pubblici in centro ~200 HUF (0.50€)<br>• Wi-Fi gratuito in quasi tutti i ristoranti e caffè<br>• Molti musei sono chiusi il lunedì — questo piano non ha problemi<br>• I prezzi nei menu includono sempre le tasse<br>• 1 HUF ≈ 0.0025€ — i prezzi sembrano tanti ma non lo sono</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🏨 Alice Hotel — tips</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">5 min dal Danubio, 10 min dal Parlamento, 5 min dal Párisi Udvar. Chiedete deposito bagagli gratuito il lunedì (volo serale). La colazione inclusa vale — mangiate bene prima delle terme.<div class="links" style="margin-top:8px"><a class="lnk lnk-b" href="https://maps.google.com/?q=Alice+Hotel+Budapest" target="_blank">Maps hotel <svg class="xi" viewBox="0 0 16 16"><path d="M7 3H3v10h10V9M9 3h4v4M13 3L7 9"/></svg></a></div></div></div></div>
     </div>
     <div id="gs-lingua" class="gs">
       <div class="est" style="margin-top:4px">Ungherese base</div>
-      <div class="ec" style="cursor:default"><div class="ecx" style="display:block;padding:0;border:none;margin:0;font-style:italic;color:var(--dim)">Non ha radici indo-europee — imparentato con finlandese ed estone. Qualsiasi tentativo è apprezzatissimo.</div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">👋 Saluti essenziali</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Szia</strong> — Ciao ("SIA")<br><strong>Jó napot</strong> — Buongiorno ("YO NAPOT")<br><strong>Köszönöm</strong> — Grazie ("KÖ-SÖ-NÖM") ← la più importante<br><strong>Kérem</strong> — Per favore<br><strong>Viszlát</strong> — Arrivederci</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍽️ Al ristorante</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Egészségére!</strong> — Salute! ("E-GES-SHE-GE-RE")<br><strong>Nagyon finom!</strong> — È buonissimo!<br><strong>Fizetni szeretnék</strong> — Vorrei pagare<br><strong>Igen</strong> — Sì · <strong>Nem</strong> — No</div></div></div>
-      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">💡 Curiosità</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">35 casi grammaticali. Nome al contrario: cognome poi nome. Budapest nasce 1873 da Buda, Óbuda e Pest. Metro linea 1 (1896) = più antica del continente europeo.</div></div></div>
+      <div class="ec" style="cursor:default"><div class="ecx" style="display:block;padding:0;border:none;margin:0;font-style:italic;color:var(--dim)">L'ungherese (Magyar) non ha radici indo-europee — imparentato solo con finlandese ed estone. Ha 35 casi grammaticali. Il nome si scrive al contrario: prima cognome, poi nome. Qualsiasi tentativo viene accolto con entusiasmo.</div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">👋 Saluti essenziali</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Szia</strong> — Ciao (si dice "SIA")<br><strong>Jó napot kívánok</strong> — Buongiorno formale ("YO NAPOT KIVÁNOK")<br><strong>Jó estét</strong> — Buonasera ("YO ESHTET")<br><strong>Köszönöm</strong> — Grazie ("KÖ-SÖ-NÖM") ← <em>la più importante in assoluto</em><br><strong>Kérem</strong> — Per favore ("KE-REM")<br><strong>Viszlát</strong> — Arrivederci ("VIS-LAT")<br><strong>Igen</strong> — Sì · <strong>Nem</strong> — No<br><strong>Nem értem</strong> — Non capisco ("NEM ER-TEM")<br><strong>Beszél angolul?</strong> — Parla inglese? ("BE-SEL AN-GO-LUL")</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🍽️ Al ristorante & brindisi</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Egészségére!</strong> — Salute! ("E-GES-SHE-GE-RE") — usatelo quando vi versano da bere<br><strong>Nagyon finom!</strong> — È buonissimo! ("NA-DYON FI-NOM") — farà felice qualsiasi cuoco<br><strong>Fizetni szeretnék</strong> — Vorrei pagare ("FI-ZET-NI SE-RET-NEK")<br><strong>Egy sört kérek</strong> — Una birra, per favore ("EDY SHÖRT KE-REK")<br><strong>Egy kávét kérek</strong> — Un caffè, per favore ("EDY KA-VET KE-REK")<br><strong>Mennyi az ár?</strong> — Quanto costa? ("MEN-NYI AZ AR")</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🗺️ Orientarsi</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Hol van...?</strong> — Dov'è? ("HOL VAN")<br><strong>Bal</strong> — Sinistra · <strong>Jobb</strong> — Destra · <strong>Egyenesen</strong> — Dritto<br><strong>Közel</strong> — Vicino · <strong>Messze</strong> — Lontano<br><strong>Segítsen!</strong> — Aiuto! ("SHEGIT-SHEN")</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">🔢 Numeri utili</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx"><strong>Egy</strong> — 1 · <strong>Kettő</strong> — 2 · <strong>Három</strong> — 3 · <strong>Négy</strong> — 4 · <strong>Öt</strong> — 5<br><strong>Hat</strong> — 6 · <strong>Hét</strong> — 7 · <strong>Nyolc</strong> — 8 · <strong>Kilenc</strong> — 9 · <strong>Tíz</strong> — 10<br><strong>Száz</strong> — 100 · <strong>Ezer</strong> — 1000<br><br>400 HUF = négyszáz forint = ~1€</div></div></div>
+      <div class="ec" onclick="te(this)"><div class="ech"><div class="ect">💡 Curiosità</div><svg class="ecv" viewBox="0 0 16 16" width="15" height="15"><path d="M4 6l4 4 4-4"/></svg></div><div class="ecb"><div class="ecx">Budapest nasce nel 1873 dalla fusione di Buda, Óbuda e Pest. Metro linea 1 (1896) = più antica d'Europa. "Goulash" viene da <em>gulyás</em> = mandriano. Il paprika arrivò dall'America nel '600 ma è diventato il simbolo della cucina ungherese. <em>Honvágy</em> = nostalgia della patria, intraducibile in altre lingue.</div></div></div>
     </div>
     <div style="height:80px"></div>
   </div>
   <div class="bnav" id="gbnav">
-    <button class="nb" onclick="showTab('itin')">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Piano
-    </button>
-    <button class="nb" onclick="showTab('ess')">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Essenziali
-    </button>
-    <button class="nb on" onclick="showTab('guide')">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      Guida
-    </button>
+    <button class="nb" onclick="showTab('itin')"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Piano</button>
+    <button class="nb" onclick="showTab('ess')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Essenziali</button>
+    <button class="nb on" onclick="showTab('guide')"><svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>Guida</button>
   </div>
 </div>
 
 <script>
-// COVER
-function startApp(){
-  var c=document.getElementById('cover');
-  c.classList.add('exit');
-  setTimeout(function(){c.style.display='none';document.getElementById('app').classList.add('show');initScroll();},620);
-}
+function startApp(){var c=document.getElementById('cover');c.classList.add('exit');setTimeout(function(){c.style.display='none';document.getElementById('app').classList.add('show');initScroll();},620);}
 
-// SCROLL HIDE/SHOW — header & bottom nav
 function initScroll(){
-  var sa=document.getElementById('scroll-area');
-  var hdr=document.getElementById('hdr');
-  var bnav=document.getElementById('bnav');
-  var last=0,ticking=false,threshold=50,minDelta=6;
+  var sa=document.getElementById('scroll-area'),hdr=document.getElementById('hdr'),bnav=document.getElementById('bnav');
+  var last=0,ticking=false,thresh=50,delta=6;
   sa.addEventListener('scroll',function(){
-    if(!ticking){
-      requestAnimationFrame(function(){
-        var cur=sa.scrollTop;
-        var d=cur-last;
-        if(Math.abs(d)>minDelta){
-          if(cur>threshold){
-            if(d>0){hdr.classList.add('hide');bnav.classList.add('hide');}
-            else{hdr.classList.remove('hide');hdr.classList.add('compact');bnav.classList.remove('hide');}
-          } else {
-            hdr.classList.remove('hide');hdr.classList.remove('compact');bnav.classList.remove('hide');
-          }
-          last=cur;
-        }
-        ticking=false;
-      });
-      ticking=true;
-    }
+    if(!ticking){requestAnimationFrame(function(){
+      var cur=sa.scrollTop,d=cur-last;
+      if(Math.abs(d)>delta){
+        if(cur>thresh){if(d>0){hdr.classList.add('hide');bnav.classList.add('hide');}else{hdr.classList.remove('hide');hdr.classList.add('compact');bnav.classList.remove('hide');}}
+        else{hdr.classList.remove('hide');hdr.classList.remove('compact');bnav.classList.remove('hide');}
+        last=cur;
+      }
+      ticking=false;
+    });ticking=true;}
   },{passive:true});
 }
 
-// DAY SWITCH
 function showDay(i,btn){
   document.querySelectorAll('.day-section').forEach(function(d){d.classList.remove('on');});
   document.querySelectorAll('.pill').forEach(function(p){p.classList.remove('on');});
-  document.getElementById('d'+i).classList.add('on');
-  btn.classList.add('on');
+  document.getElementById('d'+i).classList.add('on');btn.classList.add('on');
   document.querySelectorAll('.card.on').forEach(function(c){c.classList.remove('on');if(c.closest('.ti'))c.closest('.ti').classList.remove('on');});
   document.getElementById('scroll-area').scrollTo({top:0,behavior:'smooth'});
 }
 
-// ACCORDION
 function tc(item){var card=item.querySelector('.card');var o=card.classList.contains('on');card.classList.toggle('on',!o);item.classList.toggle('on',!o);}
 function te(el){el.classList.toggle('on');}
 
-// TAB SWITCH
 function showTab(tab){
-  var app=document.getElementById('app');
-  var guide=document.getElementById('guide-out');
-  var itin=document.getElementById('tab-itin');
-  var ess=document.getElementById('tab-ess');
-  var sa=document.getElementById('scroll-area');
-  var hdr=document.getElementById('hdr');
-  var bnav=document.getElementById('bnav');
+  var app=document.getElementById('app'),guide=document.getElementById('guide-out');
+  var itin=document.getElementById('tab-itin'),ess=document.getElementById('tab-ess');
+  var hdr=document.getElementById('hdr'),bnav=document.getElementById('bnav');
+  document.getElementById('np').classList.remove('on');
+  document.getElementById('ne').classList.remove('on');
+  document.getElementById('ng').classList.remove('on');
+  document.querySelectorAll('#gbnav .nb').forEach(function(b){b.classList.remove('on');});
   if(tab==='guide'){
     app.classList.remove('show');guide.style.display='flex';
+    document.getElementById('ng').classList.add('on');
+    document.querySelectorAll('#gbnav .nb')[2].classList.add('on');
   } else {
     guide.style.display='none';app.classList.add('show');
     hdr.classList.remove('hide');hdr.classList.remove('compact');bnav.classList.remove('hide');
-    if(tab==='itin'){
-      itin.style.display='block';ess.style.display='none';
-      document.getElementById('np').classList.add('on');
-      document.getElementById('ne').classList.remove('on');
-      document.getElementById('ng').classList.remove('on');
-    } else {
-      itin.style.display='none';ess.style.display='block';
-      document.getElementById('np').classList.remove('on');
-      document.getElementById('ne').classList.add('on');
-      document.getElementById('ng').classList.remove('on');
-    }
-    sa.scrollTo({top:0,behavior:'instant'});
+    if(tab==='itin'){itin.style.display='block';ess.style.display='none';document.getElementById('np').classList.add('on');}
+    else{itin.style.display='none';ess.style.display='block';document.getElementById('ne').classList.add('on');}
+    document.getElementById('scroll-area').scrollTo({top:0,behavior:'instant'});
   }
 }
 
-// GUIDE SUB-TAB
 function showGS(id,btn){
   document.querySelectorAll('.gs').forEach(function(s){s.classList.remove('on');});
   document.querySelectorAll('.gsb').forEach(function(b){b.classList.remove('on');});
-  document.getElementById('gs-'+id).classList.add('on');
-  btn.classList.add('on');
+  document.getElementById('gs-'+id).classList.add('on');btn.classList.add('on');
 }
 </script>
 </body>
